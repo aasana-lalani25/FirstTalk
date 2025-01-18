@@ -21,11 +21,21 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoginButtonEnabled = false;
+  bool _isPasswordVisible = false;
+  String _emailErrorMessage = ""; // Variable to hold email validation error
+
+  // Regular expression to validate email
+  final RegExp emailRegExp = RegExp(
+    r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+  );
 
   void _updateLoginButtonState() {
     setState(() {
-      _isLoginButtonEnabled = _emailController.text.isNotEmpty &&
-          _passwordController.text.length >= 12;
+      bool isEmailValid = emailRegExp.hasMatch(_emailController.text);
+      _emailErrorMessage = isEmailValid ? "" : "Please enter a valid email address.";
+
+      _isLoginButtonEnabled = isEmailValid &&
+          _passwordController.text.length >= 6;
     });
   }
 
@@ -75,6 +85,7 @@ class _LoginPageState extends State<LoginPage> {
               decoration: InputDecoration(
                 labelText: "Email",
                 border: OutlineInputBorder(),
+                errorText: _emailErrorMessage.isEmpty ? null : _emailErrorMessage,
               ),
               keyboardType: TextInputType.emailAddress,
             ),
@@ -86,18 +97,16 @@ class _LoginPageState extends State<LoginPage> {
                 border: OutlineInputBorder(),
                 suffixIcon: IconButton(
                   icon: Icon(
-                    _passwordController.text.isNotEmpty
-                        ? Icons.visibility
-                        : Icons.visibility_off,
+                    _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
                   ),
                   onPressed: () {
                     setState(() {
-                      _passwordController.text.isNotEmpty;
+                      _isPasswordVisible = !_isPasswordVisible;
                     });
                   },
                 ),
               ),
-              obscureText: true,
+              obscureText: !_isPasswordVisible,
             ),
             SizedBox(height: 20),
             ElevatedButton(
@@ -114,7 +123,6 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(height: 10),
             TextButton(
               onPressed: () {
-                // Navigate to the "Forgot Password" screen
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => ForgotPasswordPage()),
@@ -180,7 +188,6 @@ class ForgotPasswordPage extends StatelessWidget {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                // Handle reset password logic here
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text("Password reset link sent to your email!"),
@@ -207,13 +214,27 @@ class _RegistrationPageState extends State<RegistrationPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isRegisterButtonEnabled = false;
-  bool _isPasswordPopupVisible = false;
+  bool _isPasswordVisible = false;
+  String _emailErrorMessage = ""; // Variable to hold email validation error
+  String _passwordErrorMessage = "";
+
+  final RegExp emailRegExp = RegExp(
+    r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+  );
 
   void _updateRegisterButtonState() {
     setState(() {
+      bool isEmailValid = emailRegExp.hasMatch(_emailController.text);
+      _emailErrorMessage = isEmailValid ? "" : "Please enter a valid email address.";
+
+      _passwordErrorMessage = _passwordController.text.length < 6
+          ? "Password must be at least 6 characters"
+          : "";
+
       _isRegisterButtonEnabled = _nameController.text.isNotEmpty &&
           _emailController.text.isNotEmpty &&
-          _passwordController.text.length >= 12;
+          isEmailValid &&
+          _passwordController.text.length >= 6;
     });
   }
 
@@ -222,12 +243,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
     super.initState();
     _nameController.addListener(_updateRegisterButtonState);
     _emailController.addListener(_updateRegisterButtonState);
-    _passwordController.addListener(() {
-      _updateRegisterButtonState();
-      setState(() {
-        _isPasswordPopupVisible = _passwordController.text.length < 12;
-      });
-    });
+    _passwordController.addListener(_updateRegisterButtonState);
   }
 
   @override
@@ -255,85 +271,74 @@ class _RegistrationPageState extends State<RegistrationPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Stack(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  "New to FirstTalk",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 20),
-                TextField(
-                  controller: _nameController,
-                  decoration: InputDecoration(
-                    labelText: "Name",
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                SizedBox(height: 20),
-                TextField(
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                    labelText: "Email",
-                    border: OutlineInputBorder(),
-                  ),
-                  keyboardType: TextInputType.emailAddress,
-                ),
-                SizedBox(height: 20),
-                TextField(
-                  controller: _passwordController,
-                  decoration: InputDecoration(
-                    labelText: "Password",
-                    border: OutlineInputBorder(),
-                  ),
-                  obscureText: true,
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: _isRegisterButtonEnabled
-                      ? () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => LoginPage()),
-                    );
-                  }
-                      : null,
-                  child: Text("Register"),
-                ),
-                SizedBox(height: 20),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text("Already have an account? Login here"),
-                ),
-              ],
+            Text(
+              "New to FirstTalk?",
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
             ),
-            if (_isPasswordPopupVisible)
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  padding: const EdgeInsets.all(16.0),
-                  margin: const EdgeInsets.only(bottom: 20.0),
-                  decoration: BoxDecoration(
-                    color: Colors.redAccent,
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: Text(
-                    "Password must be at least 12 characters long.",
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
+            SizedBox(height: 20),
+            TextField(
+              controller: _nameController,
+              decoration: InputDecoration(
+                labelText: "Name",
+                border: OutlineInputBorder(),
               ),
+            ),
+            SizedBox(height: 20),
+            TextField(
+              controller: _emailController,
+              decoration: InputDecoration(
+                labelText: "Email",
+                border: OutlineInputBorder(),
+                errorText: _emailErrorMessage.isEmpty ? null : _emailErrorMessage,
+              ),
+              keyboardType: TextInputType.emailAddress,
+            ),
+            SizedBox(height: 20),
+            TextField(
+              controller: _passwordController,
+              decoration: InputDecoration(
+                labelText: "Password",
+                border: OutlineInputBorder(),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _isPasswordVisible = !_isPasswordVisible;
+                    });
+                  },
+                ),
+                errorText: _passwordErrorMessage.isNotEmpty
+                    ? _passwordErrorMessage
+                    : null,
+              ),
+              obscureText: !_isPasswordVisible,
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _isRegisterButtonEnabled
+                  ? () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                );
+              }
+                  : null,
+              child: Text("Register"),
+            ),
+            SizedBox(height: 20),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text("Already have an account? Login here"),
+            ),
           ],
         ),
       ),
@@ -410,7 +415,7 @@ class _TermsPageState extends State<TermsPage> {
             ElevatedButton(
               onPressed: _acceptedTerms
                   ? () {
-                // Navigate to another screen
+                // Navigate to another screen or home page
               }
                   : null,
               child: Text("Continue"),
