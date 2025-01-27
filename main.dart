@@ -1,3 +1,4 @@
+import 'package:deaf_app/splash.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -7,7 +8,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      home: Splash(),
     );
   }
 }
@@ -83,7 +84,7 @@ class _LoginPageState extends State<LoginPage> {
             TextField(
               controller: _emailController,
               decoration: InputDecoration(
-                labelText: "Email",
+                labelText: "Email/Phone No",
                 border: OutlineInputBorder(),
                 errorText: _emailErrorMessage.isEmpty ? null : _emailErrorMessage,
               ),
