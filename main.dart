@@ -1,4 +1,4 @@
-import 'package:deaf_app/splash.dart';
+import 'package:first_talk/splash.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
