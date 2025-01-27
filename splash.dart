@@ -28,10 +28,10 @@ class _SplashState extends State<Splash> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(height: 100, width: 100, color: Colors.yellow,),
+            Container(height: 100, width: 100, color: Colors.orangeAccent,),
             Container(
               child: Text(
-                "FristTalk",
+                "FirstTalk",
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
             ),
