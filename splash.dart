@@ -1,4 +1,4 @@
-import 'package:deaf_app/main.dart';
+import 'package:first_talk/main.dart';
 import 'package:flutter/material.dart';
 
 
