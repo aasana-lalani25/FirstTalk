@@ -17,7 +17,7 @@ class _SplashState extends State<Splash> {
   }
 
   _navigatetologin()async{
-    await Future.delayed(Duration(milliseconds: 1500),(){});
+    await Future.delayed(Duration(milliseconds: 1000),(){});
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginPage()));
   }
 
@@ -28,7 +28,7 @@ class _SplashState extends State<Splash> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(height: 100, width: 100, color: Colors.yellow,),
+            Container(child: Image.asset("assets/first.jpg"),height: 100,width: 100,),
             Container(
               child: Text(
                 "FristTalk",
