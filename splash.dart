@@ -1,4 +1,4 @@
-import 'package:first_talk/main.dart';
+import 'package:deaf_app/main.dart';
 import 'package:flutter/material.dart';
 
 
@@ -28,10 +28,10 @@ class _SplashState extends State<Splash> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(height: 100, width: 100, color: Colors.orangeAccent,),
+            Container(height: 100, width: 100, color: Colors.yellow,),
             Container(
               child: Text(
-                "FirstTalk",
+                "FristTalk",
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
             ),
