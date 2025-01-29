@@ -102,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       bool isEmailValid = emailRegExp.hasMatch(_emailController.text);
       _emailErrorMessage =
-      isEmailValid ? "" : "Please enter a valid email address.";
+          isEmailValid ? "" : "Please enter a valid email address.";
       _isLoginButtonEnabled =
           isEmailValid && _passwordController.text.length >= 6;
     });
@@ -192,12 +192,12 @@ class _LoginPageState extends State<LoginPage> {
                   ElevatedButton(
                     onPressed: _isLoginButtonEnabled
                         ? () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => TermsPage()),
-                      );
-                    }
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => TermsPage()),
+                            );
+                          }
                         : null,
                     child: Text("Login"),
                   ),
@@ -253,7 +253,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     setState(() {
       bool isEmailValid = emailRegExp.hasMatch(_emailController.text);
       _emailErrorMessage =
-      isEmailValid ? "" : "Please enter a valid email address.";
+          isEmailValid ? "" : "Please enter a valid email address.";
       _isResetButtonEnabled = isEmailValid;
     });
   }
@@ -276,7 +276,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       appBar: AppBar(
         title: Text(
           "FirstTalk",
-          style: TextStyle(fontSize: 24, color: Colors.black, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontSize: 24, color: Colors.black, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         backgroundColor: Colors.orangeAccent,
@@ -293,7 +294,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   children: [
                     Text(
                       "Reset Your Password",
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black),
+                      style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: 20),
@@ -304,7 +308,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         border: OutlineInputBorder(),
                         fillColor: Colors.white,
                         filled: true,
-                        errorText: _emailErrorMessage.isEmpty ? null : _emailErrorMessage,
+                        errorText: _emailErrorMessage.isEmpty
+                            ? null
+                            : _emailErrorMessage,
                       ),
                       keyboardType: TextInputType.emailAddress,
                     ),
@@ -312,13 +318,14 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     ElevatedButton(
                       onPressed: _isResetButtonEnabled
                           ? () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text("Password reset link sent to your email!"),
-                          ),
-                        );
-                        Navigator.pop(context);
-                      }
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                      "Password reset link sent to your email!"),
+                                ),
+                              );
+                              Navigator.pop(context);
+                            }
                           : null,
                       child: Text("Reset Password"),
                     ),
@@ -332,7 +339,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     );
   }
 }
-
 
 // Registration page
 class RegistrationPage extends StatefulWidget {
@@ -362,18 +368,16 @@ class _RegistrationPageState extends State<RegistrationPage> {
     setState(() {
       bool isEmailValid = emailRegExp.hasMatch(_emailController.text);
       _emailErrorMessage =
-      isEmailValid ? "" : "Please enter a valid email address.";
+          isEmailValid ? "" : "Please enter a valid email address.";
 
       bool isPasswordValid = passwordRegExp.hasMatch(_passwordController.text);
-      _passwordErrorMessage = isPasswordValid
-          ? ""
-          : "Follow instructions";
+      _passwordErrorMessage = isPasswordValid ? "" : "Follow instructions";
 
       _passwordInstructionMessage = _passwordController.text.isEmpty
           ? "Password must be 8 characters long, contain:\n1 digit, 1 uppercase letter, 1 special character."
           : (isPasswordValid
-          ? ""
-          : "Password must be 8 characters long, contain:\n1 digit, 1 uppercase letter, 1 special character.");
+              ? ""
+              : "Password must be 8 characters long, contain:\n1 digit, 1 uppercase letter, 1 special character.");
 
       _isRegisterButtonEnabled = _nameController.text.isNotEmpty &&
           _emailController.text.isNotEmpty &&
@@ -489,12 +493,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   ElevatedButton(
                     onPressed: _isRegisterButtonEnabled
                         ? () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => LoginPage()),
-                      );
-                    }
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginPage()),
+                            );
+                          }
                         : null,
                     child: Text("Register"),
                   ),
@@ -503,8 +507,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => LoginPage()),
+                        MaterialPageRoute(builder: (context) => LoginPage()),
                       );
                     },
                     child: Text("Already have an account? Login here"),
@@ -525,8 +528,11 @@ class TermsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Terms & Conditions" ,style: TextStyle(fontWeight: FontWeight.bold),),
-        backgroundColor: Colors.orangeAccent,centerTitle: true, // AppBar color
+        title: Text(
+          "Terms & Conditions",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.orangeAccent, centerTitle: true, // AppBar color
       ),
       body: Center(
         child: Padding(
@@ -543,14 +549,24 @@ class TermsPage extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   // Action when the "Agree" button is pressed
-                  Navigator.pop(context);  // You can navigate to any other page here
+                  Navigator.pop(
+                      context); // You can navigate to any other page here
                 },
                 style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all(Colors.orangeAccent),  // Button color (orange accent)
-                  padding: WidgetStateProperty.all(EdgeInsets.symmetric(vertical: 12, horizontal: 24)), // Padding for the button
-                  textStyle: WidgetStateProperty.all(TextStyle(fontSize: 16, fontWeight: FontWeight.bold)), // Text style for the button
+                  backgroundColor: WidgetStateProperty.all(Colors.orangeAccent),
+                  // Button color (orange accent)
+                  padding: WidgetStateProperty.all(
+                      EdgeInsets.symmetric(vertical: 12, horizontal: 24)),
+                  // Padding for the button
+                  textStyle: WidgetStateProperty.all(TextStyle(
+                      fontSize: 16,
+                      fontWeight:
+                          FontWeight.bold)), // Text style for the button
                 ),
-                child: Text("Agree",style: TextStyle(color: Colors.black),),  // Button text
+                child: Text(
+                  "Agree",
+                  style: TextStyle(color: Colors.black),
+                ), // Button text
               ),
             ],
           ),
