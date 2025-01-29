@@ -348,9 +348,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
   bool _isPasswordVisible = false;
   String _emailErrorMessage = "";
   String _passwordErrorMessage = "";
+  String _passwordInstructionMessage = "";
 
   final RegExp emailRegExp = RegExp(
     r'^[a-zA-Z0-9._%+-]+@[a-zAZ0-9.-]+\.[a-zA-Z]{2,}$',
+  );
+
+  final RegExp passwordRegExp = RegExp(
+    r'^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$',
   );
 
   void _updateRegisterButtonState() {
@@ -358,13 +363,22 @@ class _RegistrationPageState extends State<RegistrationPage> {
       bool isEmailValid = emailRegExp.hasMatch(_emailController.text);
       _emailErrorMessage =
       isEmailValid ? "" : "Please enter a valid email address.";
-      _passwordErrorMessage = _passwordController.text.length < 6
-          ? "Password must be at least 6 characters"
-          : "";
+
+      bool isPasswordValid = passwordRegExp.hasMatch(_passwordController.text);
+      _passwordErrorMessage = isPasswordValid
+          ? ""
+          : "Follow instructions";
+
+      _passwordInstructionMessage = _passwordController.text.isEmpty
+          ? "Password must be 8 characters long, contain:\n1 digit, 1 uppercase letter, 1 special character."
+          : (isPasswordValid
+          ? ""
+          : "Password must be 8 characters long, contain:\n1 digit, 1 uppercase letter, 1 special character.");
+
       _isRegisterButtonEnabled = _nameController.text.isNotEmpty &&
           _emailController.text.isNotEmpty &&
           isEmailValid &&
-          _passwordController.text.length >= 6;
+          isPasswordValid;
     });
   }
 
@@ -463,6 +477,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     ),
                     obscureText: !_isPasswordVisible,
                   ),
+                  SizedBox(height: 10),
+                  // Display password instruction only if password is invalid or empty
+                  if (_passwordInstructionMessage.isNotEmpty)
+                    Text(
+                      _passwordInstructionMessage,
+                      style: TextStyle(fontSize: 14, color: Colors.black54),
+                      textAlign: TextAlign.center,
+                    ),
                   SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: _isRegisterButtonEnabled
@@ -497,19 +519,40 @@ class _RegistrationPageState extends State<RegistrationPage> {
   }
 }
 
-// Terms and conditions page
+//terms and conditions
 class TermsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Terms & Conditions")),
+      appBar: AppBar(
+        title: Text("Terms & Conditions" ,style: TextStyle(fontWeight: FontWeight.bold),),
+        backgroundColor: Colors.orangeAccent,centerTitle: true, // AppBar color
+      ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Text(
-            "These are the terms and conditions of FirstTalk.",
-            style: TextStyle(fontSize: 16),
-            textAlign: TextAlign.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "These are the terms and conditions of FirstTalk.",
+                style: TextStyle(fontSize: 16),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 30), // Space between the text and the button
+              ElevatedButton(
+                onPressed: () {
+                  // Action when the "Agree" button is pressed
+                  Navigator.pop(context);  // You can navigate to any other page here
+                },
+                style: ButtonStyle(
+                  backgroundColor: WidgetStateProperty.all(Colors.orangeAccent),  // Button color (orange accent)
+                  padding: WidgetStateProperty.all(EdgeInsets.symmetric(vertical: 12, horizontal: 24)), // Padding for the button
+                  textStyle: WidgetStateProperty.all(TextStyle(fontSize: 16, fontWeight: FontWeight.bold)), // Text style for the button
+                ),
+                child: Text("Agree",style: TextStyle(color: Colors.black),),  // Button text
+              ),
+            ],
           ),
         ),
       ),
