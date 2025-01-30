@@ -104,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
       _emailErrorMessage =
           isEmailValid ? "" : "Please enter a valid email address.";
       _isLoginButtonEnabled =
-          isEmailValid && _passwordController.text.length >= 6;
+          isEmailValid && _passwordController.text.length >= 8;
     });
   }
 
