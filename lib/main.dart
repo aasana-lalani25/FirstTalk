@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'home.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -104,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
       _emailErrorMessage =
           isEmailValid ? "" : "Please enter a valid email address.";
       _isLoginButtonEnabled =
-          isEmailValid && _passwordController.text.length >= 8;
+          isEmailValid && _passwordController.text.length >= 6;
     });
   }
 
@@ -139,16 +141,18 @@ class _LoginPageState extends State<LoginPage> {
                     height: 75,
                     width: 75,
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(
+                    height: 0,
+                  ),
                   Text(
                     "FirstTalk",
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 40),
+                  SizedBox(height: 150),
                   Text(
                     "Login",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 30),
@@ -156,7 +160,10 @@ class _LoginPageState extends State<LoginPage> {
                     controller: _emailController,
                     decoration: InputDecoration(
                       labelText: "Email",
-                      border: OutlineInputBorder(),
+                      border: OutlineInputBorder(
+                        borderRadius:
+                            BorderRadius.circular(30), // Rounded corners
+                      ),
                       fillColor: Colors.white,
                       filled: true,
                       errorText: _emailErrorMessage.isEmpty
@@ -170,7 +177,10 @@ class _LoginPageState extends State<LoginPage> {
                     controller: _passwordController,
                     decoration: InputDecoration(
                       labelText: "Password",
-                      border: OutlineInputBorder(),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      // Rounded corners
                       fillColor: Colors.white,
                       filled: true,
                       suffixIcon: IconButton(
@@ -195,7 +205,7 @@ class _LoginPageState extends State<LoginPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => TermsPage()),
+                                  builder: (context) => TermsPage(userName: '',)),
                             );
                           }
                         : null,
@@ -305,7 +315,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       controller: _emailController,
                       decoration: InputDecoration(
                         labelText: "Enter your email",
-                        border: OutlineInputBorder(),
+                        border: OutlineInputBorder(
+                          borderRadius:
+                              BorderRadius.circular(30), // Rounded corners
+                        ),
                         fillColor: Colors.white,
                         filled: true,
                         errorText: _emailErrorMessage.isEmpty
@@ -419,16 +432,16 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     height: 75,
                     width: 75,
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 0),
                   Text(
                     "FirstTalk",
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 40),
+                  SizedBox(height: 150),
                   Text(
                     "Register",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 30),
@@ -436,7 +449,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     controller: _nameController,
                     decoration: InputDecoration(
                       labelText: "Name",
-                      border: OutlineInputBorder(),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30)),
                       fillColor: Colors.white,
                       filled: true,
                     ),
@@ -446,7 +460,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     controller: _emailController,
                     decoration: InputDecoration(
                       labelText: "Email",
-                      border: OutlineInputBorder(),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30)),
                       fillColor: Colors.white,
                       filled: true,
                       errorText: _emailErrorMessage.isEmpty
@@ -460,7 +475,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     controller: _passwordController,
                     decoration: InputDecoration(
                       labelText: "Password",
-                      border: OutlineInputBorder(),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30)),
                       fillColor: Colors.white,
                       filled: true,
                       suffixIcon: IconButton(
@@ -490,18 +506,22 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       textAlign: TextAlign.center,
                     ),
                   SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: _isRegisterButtonEnabled
-                        ? () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => LoginPage()),
-                            );
-                          }
-                        : null,
-                    child: Text("Register"),
-                  ),
+        // Inside the RegistrationPage widget
+        ElevatedButton(
+          onPressed: _isRegisterButtonEnabled
+              ? () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => TermsPage(userName: _nameController.text), // Pass name here
+              ),
+            );
+          }
+              : null,
+          child: Text("Register"),
+        ),
+
+
                   SizedBox(height: 20),
                   TextButton(
                     onPressed: () {
@@ -523,7 +543,26 @@ class _RegistrationPageState extends State<RegistrationPage> {
 }
 
 //terms and conditions
-class TermsPage extends StatelessWidget {
+
+class TermsPage extends StatefulWidget {
+  final String userName; // Accept name as a parameter
+
+  // Constructor to pass name to TermsPage
+  TermsPage({required this.userName});
+
+  @override
+  _TermsPageState createState() => _TermsPageState();
+}
+
+class _TermsPageState extends State<TermsPage> {
+  bool isChecked = false; // Checkbox state
+
+  void toggleCheckbox(bool? value) {
+    setState(() {
+      isChecked = value ?? false; // Toggle the checkbox value
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -532,36 +571,115 @@ class TermsPage extends StatelessWidget {
           "Terms & Conditions",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.orangeAccent, centerTitle: true, // AppBar color
+        backgroundColor: Colors.orangeAccent,
+        centerTitle: true, // AppBar color
       ),
-      body: Center(
+      body: SingleChildScrollView(
+        // Make the body scrollable
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "These are the terms and conditions of FirstTalk.",
+                "Welcome to FirstTalk, a revolutionary platform designed to record and interpret gestures for the deaf and hard-of-hearing community. "
+                    "By using our app, you agree to be bound by these Terms and Conditions, which govern your access to and use of FirstTalk.",
                 style: TextStyle(fontSize: 16),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 30), // Space between the text and the button
+              SizedBox(height: 20),
+              Text(
+                "Terms of Use",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10),
+              Text(
+                "1. Eligibility: The App is intended for individuals aged 13 and above. By using the App, you represent and warrant that you meet this eligibility requirement.\n\n"
+                    "2. User Account: You may be required to create a user account to access certain features of the App. You agree to provide accurate and complete information during the registration process.\n\n"
+                    "3. Gesture Data: By using the App, you consent to the recording and interpretation of your gestures. You acknowledge that the App may store and process your Gesture Data to provide the services.\n\n"
+                    "4. Prohibited Use: You agree not to use the App for any unlawful or unauthorized purposes, including but not limited to:\n"
+                    "- Harassing or intimidating others\n"
+                    "- Posting or sharing explicit or offensive content\n"
+                    "- Infringing on intellectual property rights\n",
+                style: TextStyle(fontSize: 16),
+              ),
+              SizedBox(height: 20),
+              Text(
+                "Privacy Policy",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10),
+              Text(
+                "1. Collection of Gesture Data: The App collects Gesture Data to provide the services. We may store and process this data to improve the App's performance and functionality.\n\n"
+                    "2. Use of Gesture Data: We may use Gesture Data for the following purposes:\n"
+                    "- To provide the services and improve the App's functionality\n"
+                    "- To develop new features and services\n"
+                    "- To analyze usage patterns and improve the user experience\n\n"
+                    "3. Sharing of Gesture Data: We may share Gesture Data with third-party service providers to improve the App's functionality and performance. We will not share Gesture Data with any third party for marketing or advertising purposes.\n\n"
+                    "4. Data Security: We implement reasonable security measures to protect Gesture Data from unauthorized access, disclosure, or destruction.",
+                style: TextStyle(fontSize: 16),
+              ),
+              SizedBox(height: 20),
+              Text(
+                "Changes to Terms and Conditions",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10),
+              Text(
+                "We reserve the right to modify or update these Terms and Conditions at any time. Your continued use of the App shall constitute your acceptance of any changes.",
+                style: TextStyle(fontSize: 16),
+              ),
+              SizedBox(height: 20),
+              Text(
+                "Acknowledgement",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10),
+              Text(
+                "By using FirstTalk, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions.",
+                style: TextStyle(fontSize: 16),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 20),
+
+              // Checkbox for accepting terms
+              Row(
+                children: [
+                  Checkbox(
+                    value: isChecked,
+                    onChanged: toggleCheckbox,
+                  ),
+                  Expanded(
+                    child: Text(
+                      "I accept the Terms and Conditions",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 30), // Space between the checkbox and the button
+
+              // Agree Button - enabled only if checkbox is checked
               ElevatedButton(
-                onPressed: () {
+                onPressed: isChecked
+                    ? () {
                   // Action when the "Agree" button is pressed
-                  Navigator.pop(
-                      context); // You can navigate to any other page here
-                },
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomePage(
+                        userName: widget.userName, // Pass the user name here
+                      ),
+                    ),
+                  );
+                }
+                    : null, // Disable the button if the checkbox is not checked
                 style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all(Colors.orangeAccent),
-                  // Button color (orange accent)
-                  padding: WidgetStateProperty.all(
+                  backgroundColor: MaterialStateProperty.all(Colors.orangeAccent),
+                  padding: MaterialStateProperty.all(
                       EdgeInsets.symmetric(vertical: 12, horizontal: 24)),
-                  // Padding for the button
-                  textStyle: WidgetStateProperty.all(TextStyle(
+                  textStyle: MaterialStateProperty.all(TextStyle(
                       fontSize: 16,
-                      fontWeight:
-                          FontWeight.bold)), // Text style for the button
+                      fontWeight: FontWeight.bold)), // Text style for the button
                 ),
                 child: Text(
                   "Agree",
@@ -575,3 +693,4 @@ class TermsPage extends StatelessWidget {
     );
   }
 }
+
