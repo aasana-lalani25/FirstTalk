@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'home.dart';
+import 'courses.dart';
 
 void main() => runApp(MyApp());
 
@@ -104,7 +105,7 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       bool isEmailValid = emailRegExp.hasMatch(_emailController.text);
       _emailErrorMessage =
-          isEmailValid ? "" : "Please enter a valid email address.";
+      isEmailValid ? "" : "Please enter a valid email address.";
       _isLoginButtonEnabled =
           isEmailValid && _passwordController.text.length >= 6;
     });
@@ -162,7 +163,7 @@ class _LoginPageState extends State<LoginPage> {
                       labelText: "Email",
                       border: OutlineInputBorder(
                         borderRadius:
-                            BorderRadius.circular(30), // Rounded corners
+                        BorderRadius.circular(30), // Rounded corners
                       ),
                       fillColor: Colors.white,
                       filled: true,
@@ -202,12 +203,12 @@ class _LoginPageState extends State<LoginPage> {
                   ElevatedButton(
                     onPressed: _isLoginButtonEnabled
                         ? () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => TermsPage(userName: '',)),
-                            );
-                          }
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>HomePage(userName: '',)),
+                      );
+                    }
                         : null,
                     child: Text("Login"),
                   ),
@@ -263,7 +264,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     setState(() {
       bool isEmailValid = emailRegExp.hasMatch(_emailController.text);
       _emailErrorMessage =
-          isEmailValid ? "" : "Please enter a valid email address.";
+      isEmailValid ? "" : "Please enter a valid email address.";
       _isResetButtonEnabled = isEmailValid;
     });
   }
@@ -317,7 +318,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         labelText: "Enter your email",
                         border: OutlineInputBorder(
                           borderRadius:
-                              BorderRadius.circular(30), // Rounded corners
+                          BorderRadius.circular(30), // Rounded corners
                         ),
                         fillColor: Colors.white,
                         filled: true,
@@ -331,14 +332,14 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     ElevatedButton(
                       onPressed: _isResetButtonEnabled
                           ? () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                      "Password reset link sent to your email!"),
-                                ),
-                              );
-                              Navigator.pop(context);
-                            }
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                "Password reset link sent to your email!"),
+                          ),
+                        );
+                        Navigator.pop(context);
+                      }
                           : null,
                       child: Text("Reset Password"),
                     ),
@@ -381,7 +382,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
     setState(() {
       bool isEmailValid = emailRegExp.hasMatch(_emailController.text);
       _emailErrorMessage =
-          isEmailValid ? "" : "Please enter a valid email address.";
+      isEmailValid ? "" : "Please enter a valid email address.";
 
       bool isPasswordValid = passwordRegExp.hasMatch(_passwordController.text);
       _passwordErrorMessage = isPasswordValid ? "" : "Follow instructions";
@@ -389,8 +390,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
       _passwordInstructionMessage = _passwordController.text.isEmpty
           ? "Password must be 8 characters long, contain:\n1 digit, 1 uppercase letter, 1 special character."
           : (isPasswordValid
-              ? ""
-              : "Password must be 8 characters long, contain:\n1 digit, 1 uppercase letter, 1 special character.");
+          ? ""
+          : "Password must be 8 characters long, contain:\n1 digit, 1 uppercase letter, 1 special character.");
 
       _isRegisterButtonEnabled = _nameController.text.isNotEmpty &&
           _emailController.text.isNotEmpty &&
@@ -506,20 +507,20 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       textAlign: TextAlign.center,
                     ),
                   SizedBox(height: 20),
-        // Inside the RegistrationPage widget
-        ElevatedButton(
-          onPressed: _isRegisterButtonEnabled
-              ? () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => TermsPage(userName: _nameController.text), // Pass name here
-              ),
-            );
-          }
-              : null,
-          child: Text("Register"),
-        ),
+                  // Inside the RegistrationPage widget
+                  ElevatedButton(
+                    onPressed: _isRegisterButtonEnabled
+                        ? () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => TermsPage(userName: _nameController.text), // Pass name here
+                        ),
+                      );
+                    }
+                        : null,
+                    child: Text("Register"),
+                  ),
 
 
                   SizedBox(height: 20),
@@ -693,4 +694,3 @@ class _TermsPageState extends State<TermsPage> {
     );
   }
 }
-
