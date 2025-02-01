@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'courses.dart'; // Ensure CoursesPage is correctly imported
+import 'courses.dart';// Ensure CoursesPage is correctly imported
+import 'profile.dart';
 
 // Home page where user's name will be displayed
 class HomePage extends StatelessWidget {
