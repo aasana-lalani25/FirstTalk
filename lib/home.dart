@@ -98,20 +98,6 @@ class HomePage extends StatelessWidget {
   }
 }
 
-// Example Profile Details Page
-class ProfileDetailsPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Profile Details'),
-        backgroundColor: Colors.orangeAccent,
-      ),
-      body: Center(
-        child: Text('Profile details content goes here.'),
-      ),
-    );
-  }
-}
+
 
 
