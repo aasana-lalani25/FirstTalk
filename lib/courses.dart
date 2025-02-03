@@ -1,3 +1,4 @@
+import 'package:first_talk/profile.dart';
 import 'package:flutter/material.dart';
 
 class CoursesPage extends StatelessWidget {
@@ -13,8 +14,16 @@ class CoursesPage extends StatelessWidget {
             icon: Icon(
               Icons.account_circle,
               color: Colors.black,
+              size: 30,
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        ProfileDetailsPage()), // Correct navigation here
+              );
+            },
           )
         ],
       ),
@@ -34,25 +43,15 @@ class CoursesPage extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 30),
+            SizedBox(height: 130),
             Text('Translate with FirstTalk',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
             SizedBox(height: 20),
-            _buildOption(Icons.camera_alt, 'Sign language translate'),
+            _buildOption(Icons.document_scanner, 'Sign language translate'),
             _buildOption(Icons.video_library, 'Learning with videos'),
             _buildOption(Icons.upload, 'Upload Videos'),
             _buildOption(Icons.search, 'Search in'),
             SizedBox(height: 20),
-            Container(
-              height: 120,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/deaf_culture.png'),
-                  // Placeholder image
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
           ],
         ),
       ),

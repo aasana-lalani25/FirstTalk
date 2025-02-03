@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-
 import 'home.dart';
-import 'courses.dart';
-import 'profile.dart';
 
 void main() => runApp(MyApp());
 
@@ -91,6 +88,7 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
+//login page
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -545,7 +543,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
 }
 
 //terms and conditions
-
 class TermsPage extends StatefulWidget {
   final String userName; // Accept name as a parameter
 
