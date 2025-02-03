@@ -12,8 +12,7 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
   String? _selectedHardOfHearing;
   TextEditingController emailController = TextEditingController();
   TextEditingController recoveryEmailController = TextEditingController();
-  TextEditingController dobController =
-      TextEditingController(); // Controller for Date of Birth
+  TextEditingController dobController = TextEditingController(); // Controller for Date of Birth
   TextEditingController nameController = TextEditingController();
   TextEditingController areaController = TextEditingController();
   TextEditingController cityController = TextEditingController();
@@ -38,7 +37,7 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
   // Helper function to validate email format
   bool _isValidEmail(String email) {
     final emailRegEx =
-        RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+    RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
     return emailRegEx.hasMatch(email);
   }
 
@@ -67,14 +66,14 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
             children: [
               Text("Edit Profile Details",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-              _buildTextField("Name", nameController),
+              _buildTextField("Name", nameController, Icons.person),
               _buildEmailTextField(),
-              _buildTextField("Recovery Email", recoveryEmailController),
+              _buildTextField("Recovery Email", recoveryEmailController, Icons.email),
               _buildDateOfBirthField(), // Date of Birth field
               _buildGenderRadioButton(),
               _buildAddressFields(),
               _buildHardOfHearingRadioButton(),
-              _buildTextField("Bio/Short Description", TextEditingController()),
+              _buildTextField("Bio/Short Description", TextEditingController(), Icons.edit),
               SizedBox(height: 20), // Space before Save button
               _buildSaveButton(),
               SizedBox(height: 10), // Space before Logout button
@@ -86,21 +85,22 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
     );
   }
 
-  // Helper function to create text fields
-  Widget _buildTextField(String label, TextEditingController controller) {
+  // Helper function to create text fields with icons
+  Widget _buildTextField(String label, TextEditingController controller, IconData icon) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: TextField(
         controller: controller,
         decoration: InputDecoration(
           labelText: label,
+          prefixIcon: Icon(icon, color: Colors.black),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         ),
       ),
     );
   }
 
-  // Helper function to create the Email TextField with validation
+  // Helper function to create the Email TextField with validation and icon
   Widget _buildEmailTextField() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -108,13 +108,14 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
         controller: emailController,
         decoration: InputDecoration(
           labelText: "Email",
+          prefixIcon: Icon(Icons.email, color: Colors.black),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         ),
       ),
     );
   }
 
-  // Helper function to create the Date of Birth TextField
+  // Helper function to create the Date of Birth TextField with icon
   Widget _buildDateOfBirthField() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -122,10 +123,10 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
         controller: dobController,
         decoration: InputDecoration(
           labelText: "Date of Birth",
+          prefixIcon: Icon(Icons.calendar_today, color: Colors.black),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         ),
         readOnly: true,
-        // Make the text field readonly so it doesn't show a keyboard
         onTap: () => _selectDate(context), // Open the date picker when tapped
       ),
     );
@@ -152,15 +153,14 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
     }
   }
 
-  // Helper function to create radio buttons for gender selection
+  // Helper function to create radio buttons for gender selection with icons
   Widget _buildGenderRadioButton() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Gender",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          Text("Gender", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           Row(
             children: <Widget>[
               Radio<String>(
@@ -172,6 +172,7 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                   });
                 },
               ),
+              Icon(Icons.male, color: Colors.black),
               Text('Male'),
               Radio<String>(
                 value: 'Female',
@@ -182,6 +183,7 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                   });
                 },
               ),
+              Icon(Icons.female, color: Colors.black),
               Text('Female'),
               Radio<String>(
                 value: 'Other',
@@ -192,6 +194,7 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                   });
                 },
               ),
+              Icon(Icons.transgender, color: Colors.black),
               Text('Other'),
             ],
           ),
@@ -200,15 +203,21 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
     );
   }
 
-  // Helper function to create radio buttons for "Hard of Hearing" selection
+  // Helper function to create radio buttons for "Hard of Hearing" selection with icons
+  // Helper function to create radio buttons for "Hard of Hearing" selection with icon on the left
   Widget _buildHardOfHearingRadioButton() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Hard of Hearing",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          Row(
+            children: [
+              Icon(Icons.hearing, color: Colors.black),  // Icon for "Hard of Hearing"
+              SizedBox(width: 6),  // Space between icon and label
+              Text("Hard of Hearing", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            ],
+          ),
           Row(
             children: <Widget>[
               Radio<String>(
@@ -221,6 +230,7 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                 },
               ),
               Text('Yes'),
+              SizedBox(width: 30), // Space between options
               Radio<String>(
                 value: 'No',
                 groupValue: _selectedHardOfHearing,
@@ -238,20 +248,19 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
     );
   }
 
-  // Helper function to create address fields (City, State, Country, Pincode)
+  // Helper function to create address fields (City, State, Country, Pincode) with icons
   Widget _buildAddressFields() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Address",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          _buildTextField("Area", areaController),
-          _buildTextField("City", cityController),
-          _buildTextField("State", stateController),
-          _buildTextField("Country", countryController),
-          _buildTextField("Pincode", pincodeController),
+          Text("Address", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          _buildTextField("Area", areaController, Icons.location_on),
+          _buildTextField("City", cityController, Icons.location_city),
+          _buildTextField("State", stateController, Icons.map),
+          _buildTextField("Country", countryController, Icons.public),
+          _buildTextField("Pincode", pincodeController, Icons.pin),
         ],
       ),
     );
@@ -263,23 +272,23 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
       child: ElevatedButton(
         onPressed: _isFormValid()
             ? () {
-                // Validate email and recovery email format
-                if (!_isValidEmail(emailController.text)) {
-                  _showErrorDialog("Invalid email format.");
-                } else if (!_isValidEmail(recoveryEmailController.text)) {
-                  _showErrorDialog("Invalid recovery email format.");
-                } else if (!_isValidPincode(pincodeController.text)) {
-                  _showErrorDialog(
-                      "Invalid pincode. It should be a 6-digit number.");
-                } else if (emailController.text ==
-                    recoveryEmailController.text) {
-                  _showErrorDialog(
-                      "Email and Recovery Email cannot be the same.");
-                } else {
-                  // Handle saving logic here
-                  _showSuccessDialog("Profile saved successfully.");
-                }
-              }
+          // Validate email and recovery email format
+          if (!_isValidEmail(emailController.text)) {
+            _showErrorDialog("Invalid email format.");
+          } else if (!_isValidEmail(recoveryEmailController.text)) {
+            _showErrorDialog("Invalid recovery email format.");
+          } else if (!_isValidPincode(pincodeController.text)) {
+            _showErrorDialog(
+                "Invalid pincode. It should be a 6-digit number.");
+          } else if (emailController.text ==
+              recoveryEmailController.text) {
+            _showErrorDialog(
+                "Email and Recovery Email cannot be the same.");
+          } else {
+            // Handle saving logic here
+            _showSuccessDialog("Profile saved successfully.");
+          }
+        }
             : null, // Disable button if form is not valid
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.orangeAccent,
@@ -354,8 +363,8 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => HomePage(
-                          userName: '',
-                        )), // Correct navigation here
+                      userName: '',
+                    )), // Correct navigation here
               );
             },
             child: Text("OK"),

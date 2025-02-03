@@ -66,7 +66,7 @@ class CoursesPage extends StatelessWidget {
           backgroundColor: Colors.orangeAccent,
           padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
           shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         ),
         onPressed: () {},
         child: Row(
