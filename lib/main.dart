@@ -97,7 +97,7 @@ class _LoginPageState extends State<LoginPage> {
   String _emailErrorMessage = "";
 
   final RegExp emailRegExp = RegExp(
-    r'^[a-zA-Z0-9._%+-]+@[a-zAZ0-9.-]+\.[a-zA-Z]{2,}$',
+    r'^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com)$',
   );
 
   void _updateLoginButtonState() {
@@ -255,7 +255,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   String _emailErrorMessage = "";
 
   final RegExp emailRegExp = RegExp(
-    r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+    r'^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com)$',
   );
 
   // Update the button state based on email validation
@@ -370,7 +370,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   String _passwordInstructionMessage = "";
 
   final RegExp emailRegExp = RegExp(
-    r'^[a-zA-Z0-9._%+-]+@[a-zAZ0-9.-]+\.[a-zA-Z]{2,}$',
+    r'^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com)$',
   );
 
   final RegExp passwordRegExp = RegExp(
