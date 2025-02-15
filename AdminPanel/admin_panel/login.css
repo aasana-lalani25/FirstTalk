@@ -1,0 +1,150 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Container for the whole screen */
+.container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+/* Left Section (Login Form) */
+.left-section {
+    width: 50%;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.login-box {
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    background-color: orange;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Heading Styles */
+h1 {
+    font-size: 30px;
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Input Group Styles */
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    font-size: 18px;
+    color: #333;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+/* Submit Button */
+.input-group input[type="submit"] {
+    background-color: #0e1533; /* Dark color for the button */
+    color: white; /* White text for contrast */
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none; /* Remove border to make it look cleaner */
+}
+
+.input-group input[type="submit"]:hover {
+    background-color: #1a2237; /* Slightly lighter shade for hover */
+    color: #ffffff; /* Ensure text remains white */
+}
+
+/* Right Section (Background Image Only) */
+.right-section {
+    width: 50%;
+    background-image: url('bg_login.png'); /* Add your background image here */
+    background-size: auto 100%; /* Adjust the image size */
+    background-position: center;
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+    background-color: orange; /* Background color for the whole right section */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centers content vertically */
+    align-items: center;
+    text-align: center;
+    color: white; /* Text color */
+    padding: 20px; /* Padding between the image and the container edges */
+    position: relative; /* Ensures proper stacking order */
+    height: 100vh; /* Full height of the viewport */
+    box-sizing: border-box; /* Ensures padding doesn't affect width */
+    overflow: hidden; /* Prevents overflow if image is too large */
+}
+
+/* Image Container */
+.image-container {
+    width: 100%;
+    height: auto;
+    margin-top: 20px; /* Adds margin to create space between elements */
+}
+
+/* Responsive Design for Mobile Devices */
+@media screen and (max-width: 768px) {
+    .right-section {
+        width: 100%; /* Full width on smaller screens */
+        padding: 20px; /* Adjust padding for mobile */
+        height: 100vh; /* Ensure the section takes full height on mobile */
+    }
+
+    .image-container img {
+        width: 100%; /* Ensure image fills the container */
+    }
+}
+
+/* Responsive Design for Mobile Devices */
+@media screen and (max-width: 768px) {
+    .left-section,
+    .right-section {
+        width: 100%;
+        height: auto;
+    }
+
+    .login-box {
+        max-width: 100%;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+    
+    .input-group input {
+        font-size: 14px;
+    }
+}

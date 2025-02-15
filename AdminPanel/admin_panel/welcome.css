@@ -1,0 +1,174 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: orange;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+}
+
+/* Container for all content */
+.container {
+    display: flex; /* Flexbox for two columns */
+    width: 100%;
+    max-width: 1200px;
+    height: 100%;
+}
+
+/* Left Section Styles */
+.left-section {
+    flex: 1; /* Takes up half of the container */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: white;
+}
+
+.logo {
+    width: 150px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 36px;
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.description {
+    font-size: 18px;
+    color: #666;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* Right Section Styles */
+.right-section {
+    flex: 1; /* Takes up half of the container */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; /* For positioning the buttons and dropdowns */
+}
+
+/* Background image */
+.background-image {
+    width: 100%; /* Make the image take up the full section */
+    height: 100%;
+    object-fit: cover; /* Ensures the image covers the area */
+}
+
+/* Top Buttons (User and Admin) Styles */
+.top-buttons {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 2; /* Ensure the buttons are above the background */
+}
+
+.user-btn, .admin-btn {
+    padding: 12px 22px;
+    font-size: 16px;
+    border: none;
+    border-radius: 20px; /* Rounded corners for the button */
+    cursor: pointer;
+    margin-left: 10px;
+    transition: all 0.3s ease;
+}
+
+.user-btn {
+    background-color: #0e1533;
+    color: white;
+}
+
+.admin-btn {
+    background-color: #0e1533;
+    color: white;
+}
+
+.user-btn:hover, .admin-btn:hover {
+    background-color: #0e1533;
+}
+
+/* Dropdown Menu Styles */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 45px; /* Increased this value to create space between the button and the dropdown */
+    right: 0;
+    z-index: 1;
+    min-width: 180px;
+}
+
+/* Updated styles for dropdown items (remove square background) */
+.dropdown-item {
+    padding: 12px 20px;
+    font-size: 14px;
+    border: none; /* Removed square background */
+    border-radius: 20px; /* Rounded corners for dropdown items */
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+    margin-bottom: 5px;
+    transition: background-color 0.3s ease;
+    color: white; /* Text color */
+    background-color: transparent; /* No background color */
+}
+
+/* Different color for Admin login/register and User login/register */
+.user-btn + .dropdown-menu .dropdown-item:nth-child(1),
+.user-btn + .dropdown-menu .dropdown-item:nth-child(2) {
+    background-color: #0e1533; /* User button color for dropdown items */
+}
+
+.admin-btn + .dropdown-menu .dropdown-item:nth-child(1),
+.admin-btn + .dropdown-menu .dropdown-item:nth-child(2) {
+    background-color: #0e1533; /* Admin button color for dropdown items */
+}
+
+.dropdown-item:hover {
+    background-color: #0e1533; /* Hover effect for dropdown items */
+}
+
+/* Responsive Design for Mobile Devices */
+@media screen and (max-width: 768px) {
+    .container {
+        flex-direction: column; /* Stack the sections vertically on smaller screens */
+        align-items: center;
+    }
+
+    .left-section {
+        margin-bottom: 20px; /* Add space between sections on small screens */
+    }
+
+    .right-section {
+        width: 100%;
+        margin-top: 20px; /* Add space above the image section */
+    }
+
+    .logo {
+        width: 150px; /* Resize the logo on smaller screens */
+    }
+
+    h1 {
+        font-size: 28px;
+    }
+
+    .description {
+        font-size: 16px;
+    }
+}
