@@ -1,4 +1,5 @@
 FirstTalk
+
 FirstTalk is an application designed to create a positive impact on the Deaf community by providing a platform to connect, communicate, and interact. This project includes two major components:
 
 Flutter Application UI: A mobile application designed using Flutter for a responsive and interactive experience.
