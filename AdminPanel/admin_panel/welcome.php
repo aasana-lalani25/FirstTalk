@@ -74,7 +74,7 @@
                     <button class="dropdown-item" onclick="navigateToPage('admin', 'register')">Admin Register</button>
                 </div>
             </div>
-            <img src="bg_login.png" alt="Background Image" class="background-image">
+            <img src="bg.png" alt="Background Image" class="background-image">
         </div>
     </div>
 </body>

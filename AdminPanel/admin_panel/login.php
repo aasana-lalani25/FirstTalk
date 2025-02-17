@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION["email"] = $row["email"];
                 $_SESSION["name"] = $row["name"]; // Optional: store user's name if needed
                 // Redirect user to their dashboard or home page (Admin or regular user)
-                header("Location: adminhome.php");  // Redirect to admin home
+                header("Location: dashboard.php");  // Redirect to admin home
                 exit(); // Exit to ensure no further code is executed
             } else {
                 // Invalid password
@@ -62,15 +62,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Admin Login</title>
     <link rel="stylesheet" href="login.css">
+    <!-- Updated FontAwesome Link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
     <div class="container">
         <!-- Left Section: Login Form -->
         <div class="left-section">
+         <div class="logo-container"></div>
             <div class="login-box">
-                <h1> Admin Login</h1>
+                <h1>Admin Login</h1>
                 <form action="#" method="POST">
                     <div class="input-group">
                         <label>Email:</label>
@@ -78,13 +81,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                     <div class="input-group">
                         <label>Password:</label>
-                        <input type="password" name="password" required>
+                        <div class="password-container">
+                            <input type="password" id="password" name="password" required>
+                            <i class="fa-solid fa-eye" id="togglePassword"></i> <!-- Fixed FontAwesome icon -->
+                        </div>
                     </div>
                     <div class="input-group">
                         <input type="submit" value="Login">
                     </div>
+                    <p class="forgot-password"><a href="forgotpassword.php">Forgot Password?</a></p>
+                    <br>
                 </form>
-                <!-- Register Here Text -->
                 <p class="register-text">New admin? <a href="register.php">Register here</a></p>
             </div>
         </div>
@@ -94,5 +101,45 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <!-- You can add a background image or any content here -->
         </div>
     </div>
+
+    <!-- JavaScript to toggle password visibility -->
+    <script>
+        document.getElementById("togglePassword").addEventListener("click", function () {
+            let passwordField = document.getElementById("password");
+            let icon = this;
+
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
+            } else {
+                passwordField.type = "password";
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+            }
+        });
+    </script>
+
+    <!-- CSS for password field styling -->
+    <style>
+        .password-container {
+            position: relative;
+            width: 100%;
+        }
+        .password-container input {
+            width: 100%;
+            padding-right: 40px; /* Space for the icon */
+        }
+        .password-container i {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 18px;
+            color: #555;
+        }
+    </style>
+
 </body>
 </html>

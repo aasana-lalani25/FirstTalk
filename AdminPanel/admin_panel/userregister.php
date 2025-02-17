@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = mysqli_real_escape_string($data, $_POST["password"]);
 
     // Check if the email already exists in the database
-    $check_sql = "SELECT * FROM userlogin WHERE email = '$email'";
+    $check_sql = "SELECT * FROM login WHERE email = '$email'";
     $result = mysqli_query($data, $check_sql);
     if (mysqli_num_rows($result) > 0) {
         // If user exists, show error
@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
         // Insert the user data into the database
-        $sql = "INSERT INTO userlogin (name, email, password) VALUES ('$name', '$email', '$hashed_password')";
+        $sql = "INSERT INTO login (name, email, password) VALUES ('$name', '$email', '$hashed_password')";
 
         if (mysqli_query($data, $sql)) {
             // Show success popup on successful registration
@@ -52,8 +52,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> User Registration</title>
+    <title>Registration</title>
     <link rel="stylesheet" href="register.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"> <!-- FontAwesome -->
     <script>
         // Function to check password validity
         function validatePassword() {
@@ -94,12 +95,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="container">
         <!-- Left Section (Form) -->
         <div class="left-section">
-            <!-- Login Box for Registration -->
-            <div class="login-box">
-                <!-- Admin Registration Heading Inside the Box -->
-                <h1>User Registration</h1>
+            <!-- Logo Container -->
+            <div class="logo-container"></div>
 
-                <!-- Registration Form -->
+            <div class="login-box">
+                <h1>Admin Registration</h1>
                 <form action="#" method="POST">
                     <div class="input-group">
                         <label for="name">Name:</label>
@@ -114,24 +114,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     <div class="input-group">
                         <label for="password">Password:</label>
-                        <input type="password" id="password" name="password" required oninput="validatePassword()">
+                        <div class="password-container">
+                            <input type="password" id="password" name="password" required oninput="validatePassword()">
+                            <i class="fa-solid fa-eye" id="togglePassword"></i> <!-- Eye icon -->
+                        </div>
                         <p id="password-message" style="color: red; display: none;">Password must be at least 8 characters long, contain 1 uppercase letter, 1 number, and 1 special character.</p>
                     </div>
 
                     <button type="submit" class="btn" id="submit-button" disabled>Register</button>
-
-                    <!-- Register Text (Already have an account?) inside the form -->
-                    <p class="register-text">Already have an account? <a href="userlogin.php">Login here</a></p>
+                    <p class="register-text">Already have an account? <a href="login.php">Login here</a></p>
                 </form>
             </div>
         </div>
 
-        <!-- Right Section (Background Image Section) -->
+        <!-- Right Section -->
         <div class="right-section">
-            <div class="image-container">
-                <!-- You can add additional content here if needed -->
-            </div>
+            <div class="image-container"></div>
         </div>
     </div>
+
+    <!-- JavaScript to toggle password visibility -->
+    <script>
+        document.getElementById("togglePassword").addEventListener("click", function () {
+            let passwordField = document.getElementById("password");
+            let icon = this;
+
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
+            } else {
+                passwordField.type = "password";
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+            }
+        });
+    </script>
 </body>
 </html>

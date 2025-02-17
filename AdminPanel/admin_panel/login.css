@@ -6,21 +6,19 @@
 }
 
 /* Body Styles */
-body {
+body, html {
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden; /* Prevents unwanted scrolling */
 }
 
-/* Container for the whole screen */
+/* Container to hold both sections */
 .container {
     display: flex;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh; /* Full viewport height */
 }
 
 /* Left Section (Login Form) */
@@ -28,11 +26,35 @@ body {
     width: 50%;
     background-color: white;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 20px;
+    height: 100vh; /* Full height */
 }
 
+/* Logo Styling (with URL) */
+.logo-container {
+    text-align: center;
+    margin-bottom: 20px;
+    width: 70px; /* Adjust width as needed */
+    height: 70px; /* Adjust height to match the aspect ratio */
+    background-image: url('logo.jpeg'); /* Logo image URL */
+    background-size: auto 90%; /* Ensures the logo fits within the container */
+    background-repeat: no-repeat;
+    background-position: center; /* Centers the logo */
+    border-radius: 40%;
+}
+
+/* Logo Text Styling */
+.logo-container p {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    margin-top: 5px;
+}
+
+/* Login Box Styling */
 .login-box {
     width: 100%;
     max-width: 400px;
@@ -59,6 +81,8 @@ h1 {
 .input-group label {
     font-size: 18px;
     color: #333;
+    display: block;
+    text-align: left;
 }
 
 .input-group input {
@@ -72,79 +96,59 @@ h1 {
 
 /* Submit Button */
 .input-group input[type="submit"] {
-    background-color: #0e1533; /* Dark color for the button */
-    color: white; /* White text for contrast */
+    background-color: #0e1533;
+    color: white;
     cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: background-color 0.3s ease;
     padding: 12px;
     font-size: 16px;
     border-radius: 5px;
-    border: none; /* Remove border to make it look cleaner */
+    border: none;
+    width: 100%;
 }
 
 .input-group input[type="submit"]:hover {
-    background-color: #1a2237; /* Slightly lighter shade for hover */
-    color: #ffffff; /* Ensure text remains white */
+    background-color: #1a2237;
 }
 
-/* Right Section (Background Image Only) */
+/* Right Section (Background Image) */
 .right-section {
-    width: 50%;
-    background-image: url('bg_login.png'); /* Add your background image here */
-    background-size: auto 100%; /* Adjust the image size */
+    width: 50%; /* Take 50% of the container width */
+    background-color: orange;
+    background-image: url('bg_login.png'); /* Background image */
+    background-size: auto 100%; /* Ensure the background image covers the entire section */
     background-position: center;
-    background-repeat: no-repeat; /* Prevents the image from repeating */
-    background-color: orange; /* Background color for the whole right section */
+    background-repeat: no-repeat;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Centers content vertically */
+    justify-content: center;
     align-items: center;
-    text-align: center;
-    color: white; /* Text color */
-    padding: 20px; /* Padding between the image and the container edges */
-    position: relative; /* Ensures proper stacking order */
-    height: 100vh; /* Full height of the viewport */
-    box-sizing: border-box; /* Ensures padding doesn't affect width */
-    overflow: hidden; /* Prevents overflow if image is too large */
+    color: orange;
+    padding: 40px;
+    position: relative;
+    height: 100vh; /* Full height */
+    box-sizing: border-box; /* Ensure padding is part of the height calculation */
 }
 
-/* Image Container */
-.image-container {
+/* Ensure Image Covers Full Section */
+.right-section img {
     width: 100%;
-    height: auto;
-    margin-top: 20px; /* Adds margin to create space between elements */
+    height: 100%;
+    object-fit: cover; /* Ensures the image fully covers the section */
 }
 
 /* Responsive Design for Mobile Devices */
 @media screen and (max-width: 768px) {
-    .right-section {
-        width: 100%; /* Full width on smaller screens */
-        padding: 20px; /* Adjust padding for mobile */
-        height: 100vh; /* Ensure the section takes full height on mobile */
+    .container {
+        flex-direction: column;
     }
 
-    .image-container img {
-        width: 100%; /* Ensure image fills the container */
-    }
-}
-
-/* Responsive Design for Mobile Devices */
-@media screen and (max-width: 768px) {
-    .left-section,
-    .right-section {
+    .left-section, .right-section {
         width: 100%;
-        height: auto;
+        height: 50vh; /* Adjusted for small screens */
     }
 
     .login-box {
-        max-width: 100%;
-    }
-
-    h1 {
-        font-size: 24px;
-    }
-    
-    .input-group input {
-        font-size: 14px;
+        max-width: 90%;
     }
 }

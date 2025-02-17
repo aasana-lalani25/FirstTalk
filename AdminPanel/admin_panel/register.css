@@ -24,22 +24,33 @@ body {
     max-width: 100%; /* Set to 100% to ensure no unwanted space */
 }
 
-
-
-
 /* Left Section (Registration Form) */
 .left-section {
     width: 50%; /* Take 50% of the container width */
     padding: 30px; /* Padding for spacing */
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start; /* Align content to the top */
     align-items: center;
     background-color: white; /* White background for the form */
     height: 100vh; /* Full height */
     box-sizing: border-box; /* Ensure padding and border are included in width/height */
 }
 
+ /* Logo Styling (with URL) */
+.logo-container {
+    text-align: center;
+    margin-bottom: 20px;
+    width: 70px; /* Adjust width as needed */
+    height: 70px; /* Adjust height to match the aspect ratio */
+    background-image: url('logo.jpeg'); /* Logo image URL */
+    background-size: auto 90%; /* Ensures the logo fits within the container */
+    background-repeat: no-repeat;
+    background-position: center; /* Centers the logo */
+    border-radius: 40%;
+}
+
+/* Login Box Styling */
 .login-box {
     width: 100%;
     max-width: 400px;
@@ -48,6 +59,7 @@ body {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 30px; /* Add space between the top of the container and the login box */
 }
 
 /* Heading Styles */
@@ -58,6 +70,7 @@ h1 {
     margin-bottom: 20px;
 }
 
+/* Form Styles */
 
 /* Input Group Styles */
 .input-group {
@@ -128,7 +141,7 @@ h1 {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    color: white;
+    color: orange;
     padding: 40px;
     position: relative;
     height: 100vh; /* Full height */
@@ -159,4 +172,23 @@ h1 {
         font-size: 14px;
         padding: 10px;
     }
+}
+
+/* Password Field Styling */
+.password-container {
+    position: relative;
+    width: 100%;
+}
+
+.password-container input {
+    width: 100%;
+    padding-right: 40px; /* Space for the icon */
+}
+
+.password-container i {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
 }
