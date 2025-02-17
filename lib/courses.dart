@@ -1,5 +1,6 @@
 import 'package:first_talk/profile.dart';
 import 'package:flutter/material.dart';
+import 'search.dart'; // Import your SearchPage here
 
 class CoursesPage extends StatelessWidget {
   @override
@@ -50,7 +51,7 @@ class CoursesPage extends StatelessWidget {
             _buildOption(Icons.document_scanner, 'Sign language translate'),
             _buildOption(Icons.video_library, 'Learning with videos'),
             _buildOption(Icons.upload, 'Upload Videos'),
-            _buildOption(Icons.search, 'Search in'),
+            _buildOption(Icons.search, 'Search In', context), // Pass context for navigation
             SizedBox(height: 20),
           ],
         ),
@@ -58,7 +59,7 @@ class CoursesPage extends StatelessWidget {
     );
   }
 
-  Widget _buildOption(IconData icon, String title) {
+  Widget _buildOption(IconData icon, String title, [BuildContext? context]) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: ElevatedButton(
@@ -68,7 +69,17 @@ class CoursesPage extends StatelessWidget {
           shape:
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         ),
-        onPressed: () {},
+        onPressed: () {
+          if (title == 'Search In' && context != null) {
+            // Navigate to SearchPage when "Search In" is clicked
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SearchPage(), // Navigate to SearchPage
+              ),
+            );
+          }
+        },
         child: Row(
           children: [
             Icon(

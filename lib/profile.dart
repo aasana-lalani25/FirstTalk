@@ -12,8 +12,7 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
   String? _selectedHardOfHearing;
   TextEditingController emailController = TextEditingController();
   TextEditingController recoveryEmailController = TextEditingController();
-  TextEditingController dobController =
-      TextEditingController(); // Controller for Date of Birth
+  TextEditingController dobController = TextEditingController(); // Controller for Date of Birth
   TextEditingController nameController = TextEditingController();
   TextEditingController areaController = TextEditingController();
   TextEditingController cityController = TextEditingController();
@@ -84,6 +83,8 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
               _buildSaveButton(),
               SizedBox(height: 10), // Space before Logout button
               _buildLogoutButton(),
+              SizedBox(height: 10), // Space before Delete Account button
+              _buildDeleteAccountButton(), // Delete Account button
             ],
           ),
         ),
@@ -299,23 +300,23 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
       child: ElevatedButton(
         onPressed: _isFormValid()
             ? () {
-                // Validate email and recovery email format
-                if (!_isValidEmail(emailController.text)) {
-                  _showErrorDialog("Invalid email format.");
-                } else if (!_isValidEmail(recoveryEmailController.text)) {
-                  _showErrorDialog("Invalid recovery email format.");
-                } else if (!_isValidPincode(pincodeController.text)) {
-                  _showErrorDialog(
-                      "Invalid pincode. It should be a 6-digit number.");
-                } else if (emailController.text ==
-                    recoveryEmailController.text) {
-                  _showErrorDialog(
-                      "Email and Recovery Email cannot be the same.");
-                } else {
-                  // Handle saving logic here
-                  _showSuccessDialog("Profile saved successfully.");
-                }
-              }
+          // Validate email and recovery email format
+          if (!_isValidEmail(emailController.text)) {
+            _showErrorDialog("Invalid email format.");
+          } else if (!_isValidEmail(recoveryEmailController.text)) {
+            _showErrorDialog("Invalid recovery email format.");
+          } else if (!_isValidPincode(pincodeController.text)) {
+            _showErrorDialog(
+                "Invalid pincode. It should be a 6-digit number.");
+          } else if (emailController.text ==
+              recoveryEmailController.text) {
+            _showErrorDialog(
+                "Email and Recovery Email cannot be the same.");
+          } else {
+            // Handle saving logic here
+            _showSuccessDialog("Profile saved successfully.");
+          }
+        }
             : null, // Disable button if form is not valid
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.orangeAccent,
@@ -357,6 +358,59 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
     );
   }
 
+  // Helper function to create the Delete Account button
+  Widget _buildDeleteAccountButton() {
+    return Center(
+      child: ElevatedButton(
+        onPressed: () {
+          _showDeleteConfirmationDialog();
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.redAccent,
+          padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+          minimumSize: Size(double.infinity, 50),
+        ),
+        child: Text(
+          "Delete Account",
+          style: TextStyle(fontSize: 20, color: Colors.white),
+        ),
+      ),
+    );
+  }
+
+  // Show confirmation dialog for deleting the account
+  void _showDeleteConfirmationDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Delete Account"),
+        content: Text("Are you sure you want to delete the account?"),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+            },
+            child: Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () {
+              // Navigate to Registration page when user confirms
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => RegistrationPage()),
+                    (Route<dynamic> route) => false, // Remove all routes
+              );
+            },
+            child: Text("OK"),
+          ),
+        ],
+      ),
+    );
+  }
+
   // Show an error dialog
   void _showErrorDialog(String message) {
     showDialog(
@@ -390,8 +444,8 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => HomePage(
-                            userName: '',
-                          )));
+                        userName: '',
+                      ))); // Navigate to HomePage after saving
             },
             child: Text("OK"),
           ),
