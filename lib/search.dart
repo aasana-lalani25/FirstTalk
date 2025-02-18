@@ -35,6 +35,7 @@ class _SearchPageState extends State<SearchPage> {
         backgroundColor: Colors.orangeAccent,
         title: Text('Search in FirstTalk',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -56,13 +57,15 @@ class _SearchPageState extends State<SearchPage> {
                     }
                   },
                 ),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
               ),
             ),
             SizedBox(height: 20),
 
             // Language Selection
-            Text('Select Language:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            Text('Select Language:',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             SizedBox(height: 8),
             DropdownButtonFormField<String>(
               value: selectedLanguage,
@@ -78,7 +81,8 @@ class _SearchPageState extends State<SearchPage> {
                 });
               },
               decoration: InputDecoration(
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
               ),
             ),
             SizedBox(height: 20),
@@ -92,7 +96,8 @@ class _SearchPageState extends State<SearchPage> {
               maxLines: 3,
               decoration: InputDecoration(
                 hintText: 'Enter your query here...',
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
               ),
             ),
             SizedBox(height: 20),
@@ -103,18 +108,23 @@ class _SearchPageState extends State<SearchPage> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orangeAccent,
                   padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30)),
                 ),
                 onPressed: () {
                   String comment = _commentController.text.trim();
                   if (comment.isNotEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Your query is submitted. We will reach out to you soon.')),
+                      SnackBar(
+                          content: Text(
+                              'Your query is submitted. We will reach out to you soon.')),
                     );
-                    _commentController.clear(); // Clear the comment box after submission
+                    _commentController
+                        .clear(); // Clear the comment box after submission
                   }
                 },
-                child: Text('Submit Query', style: TextStyle(fontSize: 18, color: Colors.black)),
+                child: Text('Submit Query',
+                    style: TextStyle(fontSize: 18, color: Colors.black)),
               ),
             ),
           ],

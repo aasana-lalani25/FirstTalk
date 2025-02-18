@@ -1,6 +1,7 @@
 import 'package:first_talk/profile.dart';
 import 'package:flutter/material.dart';
 import 'search.dart'; // Import your SearchPage here
+import 'learning_videos_page.dart'; // Import the LearningVideosPage
 
 class CoursesPage extends StatelessWidget {
   @override
@@ -49,7 +50,7 @@ class CoursesPage extends StatelessWidget {
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
             SizedBox(height: 20),
             _buildOption(Icons.document_scanner, 'Sign language translate'),
-            _buildOption(Icons.video_library, 'Learning with videos'),
+            _buildOption(Icons.video_library, 'Learning with videos', context),
             _buildOption(Icons.upload, 'Upload Videos'),
             _buildOption(Icons.search, 'Search In', context), // Pass context for navigation
             SizedBox(height: 20),
@@ -76,6 +77,14 @@ class CoursesPage extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (context) => SearchPage(), // Navigate to SearchPage
+              ),
+            );
+          } else if (title == 'Learning with videos' && context != null) {
+            // Navigate to LearningVideosPage when "Learning with videos" is clicked
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => LearningVideosPage(), // Navigate to LearningVideosPage
               ),
             );
           }
