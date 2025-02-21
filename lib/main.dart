@@ -104,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       bool isEmailValid = emailRegExp.hasMatch(_emailController.text);
       _emailErrorMessage =
-      isEmailValid ? "" : "Please enter a valid email address.";
+          isEmailValid ? "" : "Please enter a valid email address.";
       _isLoginButtonEnabled =
           isEmailValid && _passwordController.text.length >= 6;
     });
@@ -162,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                       labelText: "Email",
                       border: OutlineInputBorder(
                         borderRadius:
-                        BorderRadius.circular(30), // Rounded corners
+                            BorderRadius.circular(30), // Rounded corners
                       ),
                       fillColor: Colors.white,
                       filled: true,
@@ -202,12 +202,14 @@ class _LoginPageState extends State<LoginPage> {
                   ElevatedButton(
                     onPressed: _isLoginButtonEnabled
                         ? () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>HomePage(userName: '',)),
-                      );
-                    }
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HomePage(
+                                        userName: '',
+                                      )),
+                            );
+                          }
                         : null,
                     child: Text("Login"),
                   ),
@@ -263,7 +265,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     setState(() {
       bool isEmailValid = emailRegExp.hasMatch(_emailController.text);
       _emailErrorMessage =
-      isEmailValid ? "" : "Please enter a valid email address.";
+          isEmailValid ? "" : "Please enter a valid email address.";
       _isResetButtonEnabled = isEmailValid;
     });
   }
@@ -317,7 +319,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         labelText: "Enter your email",
                         border: OutlineInputBorder(
                           borderRadius:
-                          BorderRadius.circular(30), // Rounded corners
+                              BorderRadius.circular(30), // Rounded corners
                         ),
                         fillColor: Colors.white,
                         filled: true,
@@ -331,14 +333,14 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     ElevatedButton(
                       onPressed: _isResetButtonEnabled
                           ? () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                                "Password reset link sent to your email!"),
-                          ),
-                        );
-                        Navigator.pop(context);
-                      }
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                      "Password reset link sent to your email!"),
+                                ),
+                              );
+                              Navigator.pop(context);
+                            }
                           : null,
                       child: Text("Reset Password"),
                     ),
@@ -381,7 +383,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
     setState(() {
       bool isEmailValid = emailRegExp.hasMatch(_emailController.text);
       _emailErrorMessage =
-      isEmailValid ? "" : "Please enter a valid email address.";
+          isEmailValid ? "" : "Please enter a valid email address.";
 
       bool isPasswordValid = passwordRegExp.hasMatch(_passwordController.text);
       _passwordErrorMessage = isPasswordValid ? "" : "Follow instructions";
@@ -389,8 +391,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
       _passwordInstructionMessage = _passwordController.text.isEmpty
           ? "Password must be 8 characters long, contain:\n1 digit, 1 uppercase letter, 1 special character."
           : (isPasswordValid
-          ? ""
-          : "Password must be 8 characters long, contain:\n1 digit, 1 uppercase letter, 1 special character.");
+              ? ""
+              : "Password must be 8 characters long, contain:\n1 digit, 1 uppercase letter, 1 special character.");
 
       _isRegisterButtonEnabled = _nameController.text.isNotEmpty &&
           _emailController.text.isNotEmpty &&
@@ -510,17 +512,17 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   ElevatedButton(
                     onPressed: _isRegisterButtonEnabled
                         ? () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => TermsPage(userName: _nameController.text), // Pass name here
-                        ),
-                      );
-                    }
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => OtpVerificationPage(
+                                    userEmail: _emailController.text),
+                              ),
+                            );
+                          }
                         : null,
                     child: Text("Register"),
                   ),
-
 
                   SizedBox(height: 20),
                   TextButton(
@@ -581,7 +583,7 @@ class _TermsPageState extends State<TermsPage> {
             children: [
               Text(
                 "Welcome to FirstTalk, a revolutionary platform designed to record and interpret gestures for the deaf and hard-of-hearing community. "
-                    "By using our app, you agree to be bound by these Terms and Conditions, which govern your access to and use of FirstTalk.",
+                "By using our app, you agree to be bound by these Terms and Conditions, which govern your access to and use of FirstTalk.",
                 style: TextStyle(fontSize: 16),
                 textAlign: TextAlign.center,
               ),
@@ -593,12 +595,12 @@ class _TermsPageState extends State<TermsPage> {
               SizedBox(height: 10),
               Text(
                 "1. Eligibility: The App is intended for individuals aged 13 and above. By using the App, you represent and warrant that you meet this eligibility requirement.\n\n"
-                    "2. User Account: You may be required to create a user account to access certain features of the App. You agree to provide accurate and complete information during the registration process.\n\n"
-                    "3. Gesture Data: By using the App, you consent to the recording and interpretation of your gestures. You acknowledge that the App may store and process your Gesture Data to provide the services.\n\n"
-                    "4. Prohibited Use: You agree not to use the App for any unlawful or unauthorized purposes, including but not limited to:\n"
-                    "- Harassing or intimidating others\n"
-                    "- Posting or sharing explicit or offensive content\n"
-                    "- Infringing on intellectual property rights\n",
+                "2. User Account: You may be required to create a user account to access certain features of the App. You agree to provide accurate and complete information during the registration process.\n\n"
+                "3. Gesture Data: By using the App, you consent to the recording and interpretation of your gestures. You acknowledge that the App may store and process your Gesture Data to provide the services.\n\n"
+                "4. Prohibited Use: You agree not to use the App for any unlawful or unauthorized purposes, including but not limited to:\n"
+                "- Harassing or intimidating others\n"
+                "- Posting or sharing explicit or offensive content\n"
+                "- Infringing on intellectual property rights\n",
                 style: TextStyle(fontSize: 16),
               ),
               SizedBox(height: 20),
@@ -609,12 +611,12 @@ class _TermsPageState extends State<TermsPage> {
               SizedBox(height: 10),
               Text(
                 "1. Collection of Gesture Data: The App collects Gesture Data to provide the services. We may store and process this data to improve the App's performance and functionality.\n\n"
-                    "2. Use of Gesture Data: We may use Gesture Data for the following purposes:\n"
-                    "- To provide the services and improve the App's functionality\n"
-                    "- To develop new features and services\n"
-                    "- To analyze usage patterns and improve the user experience\n\n"
-                    "3. Sharing of Gesture Data: We may share Gesture Data with third-party service providers to improve the App's functionality and performance. We will not share Gesture Data with any third party for marketing or advertising purposes.\n\n"
-                    "4. Data Security: We implement reasonable security measures to protect Gesture Data from unauthorized access, disclosure, or destruction.",
+                "2. Use of Gesture Data: We may use Gesture Data for the following purposes:\n"
+                "- To provide the services and improve the App's functionality\n"
+                "- To develop new features and services\n"
+                "- To analyze usage patterns and improve the user experience\n\n"
+                "3. Sharing of Gesture Data: We may share Gesture Data with third-party service providers to improve the App's functionality and performance. We will not share Gesture Data with any third party for marketing or advertising purposes.\n\n"
+                "4. Data Security: We implement reasonable security measures to protect Gesture Data from unauthorized access, disclosure, or destruction.",
                 style: TextStyle(fontSize: 16),
               ),
               SizedBox(height: 20),
@@ -661,31 +663,130 @@ class _TermsPageState extends State<TermsPage> {
               ElevatedButton(
                 onPressed: isChecked
                     ? () {
-                  // Action when the "Agree" button is pressed
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => HomePage(
-                        userName: widget.userName, // Pass the user name here
-                      ),
-                    ),
-                  );
-                }
+                        // Action when the "Agree" button is pressed
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HomePage(
+                              userName:
+                                  widget.userName, // Pass the user name here
+                            ),
+                          ),
+                        );
+                      }
                     : null, // Disable the button if the checkbox is not checked
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.orangeAccent),
+                  backgroundColor:
+                      MaterialStateProperty.all(Colors.orangeAccent),
                   padding: MaterialStateProperty.all(
                       EdgeInsets.symmetric(vertical: 12, horizontal: 24)),
                   textStyle: MaterialStateProperty.all(TextStyle(
                       fontSize: 16,
-                      fontWeight: FontWeight.bold)), // Text style for the button
+                      fontWeight:
+                          FontWeight.bold)), // Text style for the button
                 ),
-                child: Text(
-                  "Agree",
-                  style: TextStyle(color: Colors.black),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      textAlign: TextAlign.center,
+                      "Agree",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ],
                 ), // Button text
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+//OTP VERIFICATION
+
+class OtpVerificationPage extends StatefulWidget {
+  final String userEmail;
+
+  OtpVerificationPage({required this.userEmail});
+
+  @override
+  _OtpVerificationPageState createState() => _OtpVerificationPageState();
+}
+
+class _OtpVerificationPageState extends State<OtpVerificationPage> {
+  final TextEditingController _otpController = TextEditingController();
+  String _errorMessage = "";
+  final String _correctOtp = "1234"; // Hardcoded for now
+
+  void _verifyOtp() {
+    if (_otpController.text == _correctOtp) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => TermsPage(userName: "User"),
+        ),
+      );
+    } else {
+      setState(() {
+        _errorMessage = "Invalid OTP. Please try again.";
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.orangeAccent,
+        title: Text(
+          "OTP Verification",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+      ),
+      body: GradientBackground(
+        child: Center(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(height: 20),
+                  Text(
+                    "Enter the 4-digit OTP sent to ${widget.userEmail}",
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 20),
+                  TextField(
+                    controller: _otpController,
+                    keyboardType: TextInputType.number,
+                    maxLength: 4,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      fillColor: Colors.white,
+                      filled: true,
+                      labelText: "Enter OTP",
+                      errorText: _errorMessage.isEmpty ? null : _errorMessage,
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: _verifyOtp,
+                    child: Text(
+                      "Submit",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ),

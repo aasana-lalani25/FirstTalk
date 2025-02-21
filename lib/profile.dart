@@ -339,8 +339,7 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
     return Center(
       child: ElevatedButton(
         onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => LoginPage()));
+          _showLogoutConfirmationDialog();
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.orangeAccent,
@@ -354,6 +353,34 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
           "Logout",
           style: TextStyle(fontSize: 20, color: Colors.white),
         ),
+      ),
+    );
+  }
+  void _showLogoutConfirmationDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Logout"),
+        content: Text("Are you sure you want to logout?"),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+            },
+            child: Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () {
+              // Navigate to LoginPage after confirming logout
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => LoginPage()),
+                    (Route<dynamic> route) => false, // Remove all previous routes
+              );
+            },
+            child: Text("OK"),
+          ),
+        ],
       ),
     );
   }
