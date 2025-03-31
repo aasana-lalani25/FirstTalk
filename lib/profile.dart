@@ -1,3 +1,5 @@
+
+
 import 'package:first_talk/home.dart';
 import 'package:first_talk/main.dart';
 import 'package:flutter/material.dart';
@@ -10,10 +12,14 @@ class ProfileDetailsPage extends StatefulWidget {
 class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
   String? _selectedGender;
   String? _selectedHardOfHearing;
+  String _selectedCountryCode = '+91'; // Default country code
   TextEditingController emailController = TextEditingController();
   TextEditingController recoveryEmailController = TextEditingController();
+  TextEditingController phonenoController = TextEditingController();
   TextEditingController dobController = TextEditingController(); // Controller for Date of Birth
-  TextEditingController nameController = TextEditingController();
+  TextEditingController firstnameController = TextEditingController();
+  TextEditingController lastnameController = TextEditingController();
+  TextEditingController houseNoController = TextEditingController();
   TextEditingController areaController = TextEditingController();
   TextEditingController cityController = TextEditingController();
   TextEditingController stateController = TextEditingController();
@@ -22,11 +28,14 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
 
   // Helper function to check if all fields are filled
   bool _isFormValid() {
-    bool isValid = nameController.text.isNotEmpty &&
+    bool isValid = firstnameController.text.isNotEmpty &&
+        lastnameController.text.isNotEmpty &&
         emailController.text.isNotEmpty &&
         recoveryEmailController.text.isNotEmpty &&
+        phonenoController.text.isNotEmpty &&
         dobController.text.isNotEmpty &&
         _selectedGender != null &&
+        houseNoController.text.isNotEmpty &&
         areaController.text.isNotEmpty &&
         cityController.text.isNotEmpty &&
         stateController.text.isNotEmpty &&
@@ -36,6 +45,13 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
     print("Form Valid: $isValid"); // Debugging statement
     return isValid;
   }
+
+  // Updated function to validate phone number format
+  bool _isvalidPhoneNo(String phone) {
+    final phoneRegEx = RegExp(r'^[0-9]{10}$'); // Ensures exactly 10 digits
+    return phoneRegEx.hasMatch(phone);
+  }
+
 
   // Helper function to validate email format
   bool _isValidEmail(String email) {
@@ -70,10 +86,12 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
             children: [
               Text("Edit Profile Details",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-              _buildTextField("Name", nameController, Icons.person),
+              _buildTextField("First Name", firstnameController, Icons.person),
+              _buildTextField("Last Name", lastnameController, Icons.person),
               _buildEmailTextField(),
               _buildRecoveryEmailTextField(),
-              _buildDateOfBirthField(), // Date of Birth field
+              _buildPhoneNoTextField(),
+              _buildDateOfBirthField(context), // Date of Birth field
               _buildGenderRadioButton(),
               _buildAddressFields(),
               _buildHardOfHearingRadioButton(),
@@ -141,8 +159,53 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
     );
   }
 
+
+  Widget _buildPhoneNoTextField() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        children: [
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 8),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: DropdownButton<String>(
+              value: _selectedCountryCode,
+              items: ['+91', '+1', '+44', '+61', '+81'].map((code) {
+                return DropdownMenuItem(
+                  value: code,
+                  child: Text(code),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  _selectedCountryCode = value!;
+                });
+              },
+            ),
+          ),
+          SizedBox(width: 10),
+          Expanded(
+            child: TextField(
+              controller: phonenoController,
+              decoration: InputDecoration(
+                labelText: "Phone No",
+                prefixIcon: Icon(Icons.phone, color: Colors.black),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                errorText: _isvalidPhoneNo(phonenoController.text) ? null : 'Enter a valid phone number',
+              ),
+              keyboardType: TextInputType.phone,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   // Helper function to create the Date of Birth TextField with icon
-  Widget _buildDateOfBirthField() {
+  Widget _buildDateOfBirthField(BuildContext context) { // Pass context explicitly
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: TextField(
@@ -153,14 +216,17 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         ),
         readOnly: true,
-        onTap: () => _selectDate(context), // Open the date picker when tapped
+        onTap: () => _selectDate(context), // Pass context when calling function
       ),
     );
   }
 
-  // Date picker method
+// Date picker method
   Future<void> _selectDate(BuildContext context) async {
-    DateTime initialDate = DateTime.now();
+    DateTime initialDate = dobController.text.isNotEmpty
+        ? DateTime.parse(dobController.text) // Use existing date if available
+        : DateTime.now();
+
     DateTime firstDate = DateTime(1900);
     DateTime lastDate = DateTime.now();
 
@@ -171,10 +237,11 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
       lastDate: lastDate,
     );
 
-    if (picked != null && picked != initialDate) {
+    if (picked != null) {
       setState(() {
-        dobController.text = "${picked.toLocal()}"
-            .split(' ')[0]; // Format the date to YYYY-MM-DD
+        dobController.text = "${picked.day.toString().padLeft(2, '0')}-"
+            "${picked.month.toString().padLeft(2, '0')}-"
+            "${picked.year}"; // Format as DD-MM-YYYY
       });
     }
   }
@@ -284,6 +351,7 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
         children: [
           Text("Address",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          _buildTextField("House No, Building, Society", houseNoController, Icons.home),
           _buildTextField("Area", areaController, Icons.location_on),
           _buildTextField("City", cityController, Icons.location_city),
           _buildTextField("State", stateController, Icons.map),

@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'home.dart';
 
@@ -90,36 +91,49 @@ class LoginPage extends StatefulWidget {
 
 //login page
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _emailPhoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoginButtonEnabled = false;
   bool _isPasswordVisible = false;
-  String _emailErrorMessage = "";
+  String _emailPhoneErrorMessage = "";
 
   final RegExp emailRegExp = RegExp(
     r'^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com)$',
   );
 
+
+  final RegExp phoneRegExp = RegExp(r'^[0-9]{10}$'); // Exactly 10 digits
+
   void _updateLoginButtonState() {
     setState(() {
-      bool isEmailValid = emailRegExp.hasMatch(_emailController.text);
-      _emailErrorMessage =
-          isEmailValid ? "" : "Please enter a valid email address.";
+      String input = _emailPhoneController.text;
+      bool isEmailValid = emailRegExp.hasMatch(input);
+      bool isPhoneValid = phoneRegExp.hasMatch(input);
+
+      if (input.isEmpty) {
+        _emailPhoneErrorMessage = "This field cannot be empty.";
+      } else if (!isEmailValid && !isPhoneValid) {
+        _emailPhoneErrorMessage =
+        "Enter a valid email (Gmail/Yahoo) or a 10-digit phone number.";
+      } else {
+        _emailPhoneErrorMessage = "";
+      }
+
       _isLoginButtonEnabled =
-          isEmailValid && _passwordController.text.length >= 6;
+          (isEmailValid || isPhoneValid) && _passwordController.text.length >= 6;
     });
   }
 
   @override
   void initState() {
     super.initState();
-    _emailController.addListener(_updateLoginButtonState);
+    _emailPhoneController.addListener(_updateLoginButtonState);
     _passwordController.addListener(_updateLoginButtonState);
   }
 
   @override
   void dispose() {
-    _emailController.dispose();
+    _emailPhoneController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -157,18 +171,18 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   SizedBox(height: 30),
                   TextField(
-                    controller: _emailController,
+                    controller: _emailPhoneController,
                     decoration: InputDecoration(
-                      labelText: "Email",
+                      labelText: "Phone No/Email",
                       border: OutlineInputBorder(
                         borderRadius:
-                            BorderRadius.circular(30), // Rounded corners
+                        BorderRadius.circular(30), // Rounded corners
                       ),
                       fillColor: Colors.white,
                       filled: true,
-                      errorText: _emailErrorMessage.isEmpty
+                      errorText: _emailPhoneErrorMessage.isEmpty
                           ? null
-                          : _emailErrorMessage,
+                          : _emailPhoneErrorMessage,
                     ),
                     keyboardType: TextInputType.emailAddress,
                   ),
@@ -202,14 +216,14 @@ class _LoginPageState extends State<LoginPage> {
                   ElevatedButton(
                     onPressed: _isLoginButtonEnabled
                         ? () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HomePage(
-                                        userName: '',
-                                      )),
-                            );
-                          }
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => HomePage(
+                              userName: '',
+                            )),
+                      );
+                    }
                         : null,
                     child: Text("Login"),
                   ),
@@ -265,7 +279,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     setState(() {
       bool isEmailValid = emailRegExp.hasMatch(_emailController.text);
       _emailErrorMessage =
-          isEmailValid ? "" : "Please enter a valid email address.";
+      isEmailValid ? "" : "Please enter a valid email address.";
       _isResetButtonEnabled = isEmailValid;
     });
   }
@@ -319,7 +333,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         labelText: "Enter your email",
                         border: OutlineInputBorder(
                           borderRadius:
-                              BorderRadius.circular(30), // Rounded corners
+                          BorderRadius.circular(30), // Rounded corners
                         ),
                         fillColor: Colors.white,
                         filled: true,
@@ -333,14 +347,14 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     ElevatedButton(
                       onPressed: _isResetButtonEnabled
                           ? () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                      "Password reset link sent to your email!"),
-                                ),
-                              );
-                              Navigator.pop(context);
-                            }
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                "Password reset link sent to your email!"),
+                          ),
+                        );
+                        Navigator.pop(context);
+                      }
                           : null,
                       child: Text("Reset Password"),
                     ),
@@ -363,11 +377,12 @@ class RegistrationPage extends StatefulWidget {
 
 class _RegistrationPageState extends State<RegistrationPage> {
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController  _contactController  = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _otpController = TextEditingController();
   bool _isRegisterButtonEnabled = false;
   bool _isPasswordVisible = false;
-  String _emailErrorMessage = "";
+  String _contactErrorMessage = "";
   String _passwordErrorMessage = "";
   String _passwordInstructionMessage = "";
 
@@ -375,15 +390,21 @@ class _RegistrationPageState extends State<RegistrationPage> {
     r'^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com)$',
   );
 
+  final RegExp phoneRegExp = RegExp(
+    r'^\d{10}$',
+  );
+
+
   final RegExp passwordRegExp = RegExp(
     r'^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$',
   );
 
   void _updateRegisterButtonState() {
     setState(() {
-      bool isEmailValid = emailRegExp.hasMatch(_emailController.text);
-      _emailErrorMessage =
-          isEmailValid ? "" : "Please enter a valid email address.";
+      bool isEmailValid = emailRegExp.hasMatch(_contactController.text);
+      bool isPhoneValid = phoneRegExp.hasMatch(_contactController.text);
+      _contactErrorMessage =
+      (isEmailValid || isPhoneValid) ? "" : "Enter a valid Email or Phone Number.";
 
       bool isPasswordValid = passwordRegExp.hasMatch(_passwordController.text);
       _passwordErrorMessage = isPasswordValid ? "" : "Follow instructions";
@@ -391,12 +412,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
       _passwordInstructionMessage = _passwordController.text.isEmpty
           ? "Password must be 8 characters long, contain:\n1 digit, 1 uppercase letter, 1 special character."
           : (isPasswordValid
-              ? ""
-              : "Password must be 8 characters long, contain:\n1 digit, 1 uppercase letter, 1 special character.");
+          ? ""
+          : "Password must be 8 characters long, contain:\n1 digit, 1 uppercase letter, 1 special character.");
 
       _isRegisterButtonEnabled = _nameController.text.isNotEmpty &&
-          _emailController.text.isNotEmpty &&
-          isEmailValid &&
+          _contactController.text.isNotEmpty &&
+          (isEmailValid || isPhoneValid) &&
           isPasswordValid;
     });
   }
@@ -405,14 +426,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
   void initState() {
     super.initState();
     _nameController.addListener(_updateRegisterButtonState);
-    _emailController.addListener(_updateRegisterButtonState);
+    _contactController.addListener(_updateRegisterButtonState);
     _passwordController.addListener(_updateRegisterButtonState);
   }
 
   @override
   void dispose() {
     _nameController.dispose();
-    _emailController.dispose();
+    _contactController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -459,16 +480,16 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   ),
                   SizedBox(height: 20),
                   TextField(
-                    controller: _emailController,
+                    controller: _contactController,
                     decoration: InputDecoration(
-                      labelText: "Email",
+                      labelText: "Phone No/Email",
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30)),
                       fillColor: Colors.white,
                       filled: true,
-                      errorText: _emailErrorMessage.isEmpty
+                      errorText: _contactErrorMessage.isEmpty
                           ? null
-                          : _emailErrorMessage,
+                          : _contactErrorMessage,
                     ),
                     keyboardType: TextInputType.emailAddress,
                   ),
@@ -512,14 +533,15 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   ElevatedButton(
                     onPressed: _isRegisterButtonEnabled
                         ? () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => OtpVerificationPage(
-                                    userEmail: _emailController.text),
-                              ),
-                            );
-                          }
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => OtpVerificationPage(
+                              userContact: _otpController.text
+                          ),
+                        ),
+                      );
+                    }
                         : null,
                     child: Text("Register"),
                   ),
@@ -583,7 +605,7 @@ class _TermsPageState extends State<TermsPage> {
             children: [
               Text(
                 "Welcome to FirstTalk, a revolutionary platform designed to record and interpret gestures for the deaf and hard-of-hearing community. "
-                "By using our app, you agree to be bound by these Terms and Conditions, which govern your access to and use of FirstTalk.",
+                    "By using our app, you agree to be bound by these Terms and Conditions, which govern your access to and use of FirstTalk.",
                 style: TextStyle(fontSize: 16),
                 textAlign: TextAlign.center,
               ),
@@ -595,12 +617,12 @@ class _TermsPageState extends State<TermsPage> {
               SizedBox(height: 10),
               Text(
                 "1. Eligibility: The App is intended for individuals aged 13 and above. By using the App, you represent and warrant that you meet this eligibility requirement.\n\n"
-                "2. User Account: You may be required to create a user account to access certain features of the App. You agree to provide accurate and complete information during the registration process.\n\n"
-                "3. Gesture Data: By using the App, you consent to the recording and interpretation of your gestures. You acknowledge that the App may store and process your Gesture Data to provide the services.\n\n"
-                "4. Prohibited Use: You agree not to use the App for any unlawful or unauthorized purposes, including but not limited to:\n"
-                "- Harassing or intimidating others\n"
-                "- Posting or sharing explicit or offensive content\n"
-                "- Infringing on intellectual property rights\n",
+                    "2. User Account: You may be required to create a user account to access certain features of the App. You agree to provide accurate and complete information during the registration process.\n\n"
+                    "3. Gesture Data: By using the App, you consent to the recording and interpretation of your gestures. You acknowledge that the App may store and process your Gesture Data to provide the services.\n\n"
+                    "4. Prohibited Use: You agree not to use the App for any unlawful or unauthorized purposes, including but not limited to:\n"
+                    "- Harassing or intimidating others\n"
+                    "- Posting or sharing explicit or offensive content\n"
+                    "- Infringing on intellectual property rights\n",
                 style: TextStyle(fontSize: 16),
               ),
               SizedBox(height: 20),
@@ -611,12 +633,12 @@ class _TermsPageState extends State<TermsPage> {
               SizedBox(height: 10),
               Text(
                 "1. Collection of Gesture Data: The App collects Gesture Data to provide the services. We may store and process this data to improve the App's performance and functionality.\n\n"
-                "2. Use of Gesture Data: We may use Gesture Data for the following purposes:\n"
-                "- To provide the services and improve the App's functionality\n"
-                "- To develop new features and services\n"
-                "- To analyze usage patterns and improve the user experience\n\n"
-                "3. Sharing of Gesture Data: We may share Gesture Data with third-party service providers to improve the App's functionality and performance. We will not share Gesture Data with any third party for marketing or advertising purposes.\n\n"
-                "4. Data Security: We implement reasonable security measures to protect Gesture Data from unauthorized access, disclosure, or destruction.",
+                    "2. Use of Gesture Data: We may use Gesture Data for the following purposes:\n"
+                    "- To provide the services and improve the App's functionality\n"
+                    "- To develop new features and services\n"
+                    "- To analyze usage patterns and improve the user experience\n\n"
+                    "3. Sharing of Gesture Data: We may share Gesture Data with third-party service providers to improve the App's functionality and performance. We will not share Gesture Data with any third party for marketing or advertising purposes.\n\n"
+                    "4. Data Security: We implement reasonable security measures to protect Gesture Data from unauthorized access, disclosure, or destruction.",
                 style: TextStyle(fontSize: 16),
               ),
               SizedBox(height: 20),
@@ -663,27 +685,27 @@ class _TermsPageState extends State<TermsPage> {
               ElevatedButton(
                 onPressed: isChecked
                     ? () {
-                        // Action when the "Agree" button is pressed
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => HomePage(
-                              userName:
-                                  widget.userName, // Pass the user name here
-                            ),
-                          ),
-                        );
-                      }
+                  // Action when the "Agree" button is pressed
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomePage(
+                        userName:
+                        widget.userName, // Pass the user name here
+                      ),
+                    ),
+                  );
+                }
                     : null, // Disable the button if the checkbox is not checked
                 style: ButtonStyle(
                   backgroundColor:
-                      MaterialStateProperty.all(Colors.orangeAccent),
+                  MaterialStateProperty.all(Colors.orangeAccent),
                   padding: MaterialStateProperty.all(
                       EdgeInsets.symmetric(vertical: 12, horizontal: 24)),
                   textStyle: MaterialStateProperty.all(TextStyle(
                       fontSize: 16,
                       fontWeight:
-                          FontWeight.bold)), // Text style for the button
+                      FontWeight.bold)), // Text style for the button
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -708,9 +730,9 @@ class _TermsPageState extends State<TermsPage> {
 //OTP VERIFICATION
 
 class OtpVerificationPage extends StatefulWidget {
-  final String userEmail;
+  final String userContact;
 
-  OtpVerificationPage({required this.userEmail});
+  OtpVerificationPage({required this.userContact});
 
   @override
   _OtpVerificationPageState createState() => _OtpVerificationPageState();
@@ -719,7 +741,7 @@ class OtpVerificationPage extends StatefulWidget {
 class _OtpVerificationPageState extends State<OtpVerificationPage> {
   final TextEditingController _otpController = TextEditingController();
   String _errorMessage = "";
-  final String _correctOtp = "1234"; // Hardcoded for now
+  final String _correctOtp = "1234"; // Hardcoded OTP for now
 
   void _verifyOtp() {
     if (_otpController.text == _correctOtp) {
@@ -758,7 +780,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                 children: [
                   SizedBox(height: 20),
                   Text(
-                    "Enter the 4-digit OTP sent to ${widget.userEmail}",
+                    "Enter the 4-digit OTP sent to ${widget.userContact}",
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 20),

@@ -1,7 +1,9 @@
 import 'package:first_talk/profile.dart';
 import 'package:flutter/material.dart';
-import 'search.dart'; // Import your SearchPage here
-import 'learning_videos_page.dart'; // Import the LearningVideosPage
+import 'search.dart';
+import 'learning_videos_page.dart';
+import 'camera.dart';
+import 'upload.dart';
 
 class CoursesPage extends StatelessWidget {
   @override
@@ -22,8 +24,7 @@ class CoursesPage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>
-                        ProfileDetailsPage()), // Correct navigation here
+                    builder: (context) => ProfileDetailsPage()),
               );
             },
           )
@@ -34,13 +35,10 @@ class CoursesPage extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.all(0),
-              margin: EdgeInsets.all(0),
               height: 130,
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage('assets/people_talking.jpg'),
-                  // Placeholder image
                   fit: BoxFit.cover,
                 ),
               ),
@@ -49,10 +47,10 @@ class CoursesPage extends StatelessWidget {
             Text('Translate with FirstTalk',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
             SizedBox(height: 20),
-            _buildOption(Icons.document_scanner, 'Sign language translate'),
+            _buildOption(Icons.document_scanner, 'Sign language translate', context),
             _buildOption(Icons.video_library, 'Learning with videos', context),
-            _buildOption(Icons.upload, 'Upload Videos'),
-            _buildOption(Icons.search, 'Search In', context), // Pass context for navigation
+            _buildOption(Icons.upload, 'Upload Media', context),
+            _buildOption(Icons.search, 'Search In', context),
             SizedBox(height: 20),
           ],
         ),
@@ -67,41 +65,44 @@ class CoursesPage extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.orangeAccent,
           padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-          shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         ),
         onPressed: () {
-          if (title == 'Search In' && context != null) {
-            // Navigate to SearchPage when "Search In" is clicked
+          if (title == 'Sign language translate' && context != null) {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => SearchPage(), // Navigate to SearchPage
+                builder: (context) => SignLanguageTranslationPage(),
+              ),
+            );
+          } else if (title == 'Search In' && context != null) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SearchPage(),
               ),
             );
           } else if (title == 'Learning with videos' && context != null) {
-            // Navigate to LearningVideosPage when "Learning with videos" is clicked
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => LearningVideosPage(), // Navigate to LearningVideosPage
+                builder: (context) => LearningVideosPage(),
+              ),
+            );
+          } else if (title == 'Upload Media' && context != null) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => UploadPage(),
               ),
             );
           }
         },
         child: Row(
           children: [
-            Icon(
-              icon,
-              size: 28,
-              color: Colors.black,
-            ),
+            Icon(icon, size: 28, color: Colors.black),
             SizedBox(width: 16),
-            Text(title,
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black)),
+            Text(title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black)),
           ],
         ),
       ),
