@@ -1,38 +1,50 @@
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class LearningVideosPage extends StatelessWidget {
   final List<Map<String, String>> videoData = [
     {
-      'title': 'How to Sign Language',
-      'videoUrl': 'assets/videos/howtosign.mp4', // Path to your video file
+      'title': 'Learn Sign Language',
+      'videoUrl': 'https://www.youtube.com/watch?v=6w1ZDaE-whc',
     },
     {
-      'title': 'Understanding Sign Language',
-      'videoUrl': 'assets/videos/understand.mp4', // Path to your video file
+      'title': 'ASL for Kids',
+      'videoUrl': 'https://youtu.be/fnFWAzd3Kfw?si=QQD9K2oNiHd4qphp',
     },
     {
-      'title': 'Sign Language Basics',
-      'videoUrl': 'assets/videos/basic.mp4', // Path to your video file
+      'title': 'Basic ASL Colors',
+      'videoUrl': 'https://youtu.be/Sa9UNIQbAXM?si=C_LKiuIQhzNZG5LV',
     },
-    // Add more video data here with title and video URL
+    {
+      'title': 'Warmup Games',
+      'videoUrl': 'https://youtu.be/HZj8zm7KXug?si=lquCurGOdCLJo3VB',
+    },
+    {
+      'title': '100 Basic Signs - American Sign Language',
+      'videoUrl': 'https://www.youtube.com/watch?v=Raa0vBXA8OQ',
+    },
+    {
+      'title': 'Indian Sign Language',
+      'videoUrl': 'https://youtu.be/JPV-vboWfhY?si=lwqaeqQuQhQzM7Vb',
+    },
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.orangeAccent,
-        title: Text(
+        title: const Text(
           'Learning with Videos',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
+        backgroundColor: Colors.orangeAccent,
         centerTitle: true,
       ),
       body: ListView.builder(
+        padding: const EdgeInsets.symmetric(vertical: 10),
         itemCount: videoData.length,
         itemBuilder: (context, index) {
-          return VideoTile(
+          return YouTubeVideoTile(
             title: videoData[index]['title']!,
             videoUrl: videoData[index]['videoUrl']!,
           );
@@ -42,75 +54,128 @@ class LearningVideosPage extends StatelessWidget {
   }
 }
 
-class VideoTile extends StatefulWidget {
+class YouTubeVideoTile extends StatefulWidget {
   final String title;
   final String videoUrl;
 
-  VideoTile({required this.title, required this.videoUrl});
+  const YouTubeVideoTile({
+    Key? key,
+    required this.title,
+    required this.videoUrl,
+  }) : super(key: key);
 
   @override
-  _VideoTileState createState() => _VideoTileState();
+  _YouTubeVideoTileState createState() => _YouTubeVideoTileState();
 }
 
-class _VideoTileState extends State<VideoTile> {
-  late VideoPlayerController _controller;
+class _YouTubeVideoTileState extends State<YouTubeVideoTile> {
+  late YoutubePlayerController _controller;
   bool _isPlaying = false;
 
   @override
   void initState() {
     super.initState();
-    // Initialize the video player controller
-    _controller = VideoPlayerController.asset(widget.videoUrl)
-      ..initialize().then((_) {
-        setState(() {});
-      });
+
+    final videoId = YoutubePlayer.convertUrlToId(widget.videoUrl);
+    if (videoId == null || videoId.isEmpty) {
+      print('⚠️ Invalid YouTube URL: ${widget.videoUrl}');
+    }
+
+    _controller = YoutubePlayerController(
+      initialVideoId: videoId!,
+      flags: const YoutubePlayerFlags(
+        autoPlay: false,
+        mute: false,
+        enableCaption: true,
+        controlsVisibleAtStart: true,
+        useHybridComposition: true, // ✅ Essential for proper playback
+      ),
+    );
+
+    _controller.addListener(() {
+      final isPlayingNow = _controller.value.isPlaying;
+      if (_isPlaying != isPlayingNow) {
+        setState(() {
+          _isPlaying = isPlayingNow;
+        });
+      }
+    });
   }
 
   @override
   void dispose() {
+    _controller.pause();
     _controller.dispose();
     super.dispose();
   }
 
   void _togglePlayPause() {
-    setState(() {
-      if (_isPlaying) {
-        _controller.pause();
-      } else {
-        _controller.play();
-      }
-      _isPlaying = !_isPlaying;
-    });
+    if (_controller.value.isPlaying) {
+      _controller.pause();
+    } else {
+      _controller.play();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
       child: Card(
-        elevation: 5,
+        elevation: 4,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _controller.value.isInitialized
-                ? GestureDetector(
-              onTap: _togglePlayPause,
-              child: AspectRatio(
-                aspectRatio: _controller.value.aspectRatio,
-                child: VideoPlayer(_controller),
+            YoutubePlayerBuilder(
+              player: YoutubePlayer(
+                controller: _controller,
+                showVideoProgressIndicator: true,
+                progressIndicatorColor: Colors.amber,
+                bottomActions: [
+                  const SizedBox(width: 10),
+                  CurrentPosition(),
+                  ProgressBar(isExpanded: true),
+                  PlaybackSpeedButton(), // ✅ Make sure this is added
+                  FullScreenButton(),
+                ],
               ),
-            )
-                : Container(
-              height: 180,
-              color: Colors.grey[300],
-              child: Center(child: CircularProgressIndicator()),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                widget.title,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
+              builder: (context, player) {
+                return Column(
+                  children: [
+                    GestureDetector(
+                      onTap: _togglePlayPause,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          AspectRatio(
+                            aspectRatio: 16 / 9,
+                            child: ClipRRect(
+                              borderRadius: const BorderRadius.vertical(
+                                  top: Radius.circular(12)),
+                              child: player,
+                            ),
+                          ),
+                          if (!_isPlaying)
+                            const Icon(Icons.play_circle_fill,
+                                size: 64, color: Colors.white70),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Text(
+                        widget.title,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
           ],
         ),

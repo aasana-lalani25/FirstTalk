@@ -1,8 +1,9 @@
-
-
 import 'package:first_talk/home.dart';
 import 'package:first_talk/main.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileDetailsPage extends StatefulWidget {
   @override
@@ -16,7 +17,8 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController recoveryEmailController = TextEditingController();
   TextEditingController phonenoController = TextEditingController();
-  TextEditingController dobController = TextEditingController(); // Controller for Date of Birth
+  TextEditingController dobController =
+      TextEditingController(); // Controller for Date of Birth
   TextEditingController firstnameController = TextEditingController();
   TextEditingController lastnameController = TextEditingController();
   TextEditingController houseNoController = TextEditingController();
@@ -25,6 +27,7 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
   TextEditingController stateController = TextEditingController();
   TextEditingController countryController = TextEditingController();
   TextEditingController pincodeController = TextEditingController();
+  TextEditingController bioController = TextEditingController();
 
   // Helper function to check if all fields are filled
   bool _isFormValid() {
@@ -51,7 +54,6 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
     final phoneRegEx = RegExp(r'^[0-9]{10}$'); // Ensures exactly 10 digits
     return phoneRegEx.hasMatch(phone);
   }
-
 
   // Helper function to validate email format
   bool _isValidEmail(String email) {
@@ -96,7 +98,7 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
               _buildAddressFields(),
               _buildHardOfHearingRadioButton(),
               _buildTextField(
-                  "Bio/Short Description", TextEditingController(), Icons.edit),
+                  "Bio/Short Description", bioController, Icons.edit),
               SizedBox(height: 20), // Space before Save button
               _buildSaveButton(),
               SizedBox(height: 10), // Space before Logout button
@@ -159,7 +161,7 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
     );
   }
 
-
+  // Helper function to create the Phone No TextField with validation
   Widget _buildPhoneNoTextField() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -193,8 +195,11 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
               decoration: InputDecoration(
                 labelText: "Phone No",
                 prefixIcon: Icon(Icons.phone, color: Colors.black),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                errorText: _isvalidPhoneNo(phonenoController.text) ? null : 'Enter a valid phone number',
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                errorText: _isvalidPhoneNo(phonenoController.text)
+                    ? null
+                    : 'Enter a valid phone number',
               ),
               keyboardType: TextInputType.phone,
             ),
@@ -205,7 +210,8 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
   }
 
   // Helper function to create the Date of Birth TextField with icon
-  Widget _buildDateOfBirthField(BuildContext context) { // Pass context explicitly
+  Widget _buildDateOfBirthField(BuildContext context) {
+    // Pass context explicitly
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: TextField(
@@ -221,7 +227,7 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
     );
   }
 
-// Date picker method
+  // Date picker method
   Future<void> _selectDate(BuildContext context) async {
     DateTime initialDate = dobController.text.isNotEmpty
         ? DateTime.parse(dobController.text) // Use existing date if available
@@ -246,7 +252,7 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
     }
   }
 
-  // Helper function to create radio buttons for gender selection with icons
+  // Helper function to create radio buttons for gender selection
   Widget _buildGenderRadioButton() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -260,35 +266,32 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
               Radio<String>(
                 value: 'Male',
                 groupValue: _selectedGender,
-                onChanged: (String? value) {
+                onChanged: (value) {
                   setState(() {
                     _selectedGender = value;
                   });
                 },
               ),
-              Icon(Icons.male, color: Colors.black),
               Text('Male'),
               Radio<String>(
                 value: 'Female',
                 groupValue: _selectedGender,
-                onChanged: (String? value) {
+                onChanged: (value) {
                   setState(() {
                     _selectedGender = value;
                   });
                 },
               ),
-              Icon(Icons.female, color: Colors.black),
               Text('Female'),
               Radio<String>(
                 value: 'Other',
                 groupValue: _selectedGender,
-                onChanged: (String? value) {
+                onChanged: (value) {
                   setState(() {
                     _selectedGender = value;
                   });
                 },
               ),
-              Icon(Icons.transgender, color: Colors.black),
               Text('Other'),
             ],
           ),
@@ -297,38 +300,31 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
     );
   }
 
-  // Helper function to create radio buttons for "Hard of Hearing" selection with icon on the left
+  // Helper function to create radio buttons for Hard of Hearing selection
   Widget _buildHardOfHearingRadioButton() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Icon(Icons.hearing, color: Colors.black),
-              SizedBox(width: 6), // Space between icon and label
-              Text("Hard of Hearing",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            ],
-          ),
+          Text("Hard of Hearing",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           Row(
             children: <Widget>[
               Radio<String>(
                 value: 'Yes',
                 groupValue: _selectedHardOfHearing,
-                onChanged: (String? value) {
+                onChanged: (value) {
                   setState(() {
                     _selectedHardOfHearing = value;
                   });
                 },
               ),
               Text('Yes'),
-              SizedBox(width: 30), // Space between options
               Radio<String>(
                 value: 'No',
                 groupValue: _selectedHardOfHearing,
-                onChanged: (String? value) {
+                onChanged: (value) {
                   setState(() {
                     _selectedHardOfHearing = value;
                   });
@@ -342,67 +338,49 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
     );
   }
 
-  // Helper function to create address fields (City, State, Country, Pincode) with icons
+  // Helper function to create address fields
   Widget _buildAddressFields() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Address",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          _buildTextField("House No, Building, Society", houseNoController, Icons.home),
+          _buildTextField("House No", houseNoController, Icons.home),
           _buildTextField("Area", areaController, Icons.location_on),
           _buildTextField("City", cityController, Icons.location_city),
-          _buildTextField("State", stateController, Icons.map),
-          _buildTextField("Country", countryController, Icons.public),
+          _buildTextField("State", stateController, Icons.location_on),
+          _buildTextField("Country", countryController, Icons.flag),
           _buildTextField("Pincode", pincodeController, Icons.pin),
         ],
       ),
     );
   }
 
-  // Helper function to create the Save button
+  // Save button function
   Widget _buildSaveButton() {
-    return Center(
-      child: ElevatedButton(
-        onPressed: _isFormValid()
-            ? () {
-          // Validate email and recovery email format
-          if (!_isValidEmail(emailController.text)) {
-            _showErrorDialog("Invalid email format.");
-          } else if (!_isValidEmail(recoveryEmailController.text)) {
-            _showErrorDialog("Invalid recovery email format.");
-          } else if (!_isValidPincode(pincodeController.text)) {
-            _showErrorDialog(
-                "Invalid pincode. It should be a 6-digit number.");
-          } else if (emailController.text ==
-              recoveryEmailController.text) {
-            _showErrorDialog(
-                "Email and Recovery Email cannot be the same.");
-          } else {
-            // Handle saving logic here
-            _showSuccessDialog("Profile saved successfully.");
-          }
-        }
-            : null, // Disable button if form is not valid
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.orangeAccent,
-          padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
-          ),
-          minimumSize: Size(double.infinity, 50),
+    return ElevatedButton(
+      onPressed: _isFormValid()
+          ? () {
+              // Save profile data and navigate to HomePage
+              _saveProfile();
+            }
+          : null,
+      child: Text(
+        'Save Profile',
+        style: TextStyle(fontWeight: FontWeight.bold),
+      ),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.orangeAccent,
+        padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
         ),
-        child: Text(
-          "Save",
-          style: TextStyle(fontSize: 20, color: Colors.white),
-        ),
+        minimumSize: Size(double.infinity, 50),
       ),
     );
   }
 
-  // Helper function to create the Logout button
+  // Logout button function
   Widget _buildLogoutButton() {
     return Center(
       child: ElevatedButton(
@@ -424,6 +402,7 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
       ),
     );
   }
+
   void _showLogoutConfirmationDialog() {
     showDialog(
       context: context,
@@ -443,7 +422,7 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => LoginPage()),
-                    (Route<dynamic> route) => false, // Remove all previous routes
+                (Route<dynamic> route) => false, // Remove all previous routes
               );
             },
             child: Text("OK"),
@@ -453,7 +432,7 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
     );
   }
 
-  // Helper function to create the Delete Account button
+  // Delete account button function
   Widget _buildDeleteAccountButton() {
     return Center(
       child: ElevatedButton(
@@ -476,7 +455,6 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
     );
   }
 
-  // Show confirmation dialog for deleting the account
   void _showDeleteConfirmationDialog() {
     showDialog(
       context: context,
@@ -496,7 +474,7 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => RegistrationPage()),
-                    (Route<dynamic> route) => false, // Remove all routes
+                (Route<dynamic> route) => false, // Remove all routes
               );
             },
             child: Text("OK"),
@@ -506,46 +484,55 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
     );
   }
 
-  // Show an error dialog
-  void _showErrorDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text("Error"),
-        content: Text(message),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text("OK"),
-          ),
-        ],
-      ),
-    );
-  }
+  // Profile data save function (replace with your actual logic)
+  void _saveProfile() async {
+    if (_isFormValid()) {
+      // Prepare the data to be sent to the backend
+      var data = {
+        "first_name": firstnameController.text,
+        "last_name": lastnameController.text,
+        "email": emailController.text,
+        "recovery_email": recoveryEmailController.text,
+        "phone_no": phonenoController.text,
+        "dob": dobController.text,
+        "gender": _selectedGender,
+        "bio": bioController.text,
+        "house_no": houseNoController.text,
+        "area": areaController.text,
+        "city": cityController.text,
+        "state": stateController.text,
+        "country": countryController.text,
+        "pincode": pincodeController.text,
+        "hard_of_hearing": _selectedHardOfHearing,
+      };
 
-  // Show a success dialog
-  void _showSuccessDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text("Success"),
-        content: Text(message),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => HomePage(
-                        userName: '',
-                      ))); // Navigate to HomePage after saving
-            },
-            child: Text("OK"),
-          ),
-        ],
-      ),
-    );
+      try {
+        // Make the POST request to your backend
+        final response = await http.post(
+          Uri.parse('http://192.168.1.70/backend/save_profile.php'),
+          // Replace with your actual URL
+          headers: {
+            'Content-Type': 'application/json',
+            // Ensure the request is JSON formatted
+          },
+          body: json.encode(data), // Convert data to JSON
+        );
+
+        // Check if the response is successful (status code 200)
+        if (response.statusCode == 200) {
+          // If the server returns a 200 response, the profile was saved
+          print("Profile saved successfully.");
+          // Optionally, you can navigate to another screen or show a success message
+        } else {
+          // If the server did not return a 200 status, handle the error
+          print("Failed to save profile. Error: ${response.statusCode}");
+        }
+      } catch (e) {
+        // Handle errors, e.g., network issues or server errors
+        print("Error saving profile: $e");
+      }
+    } else {
+      print("Please fill all the required fields.");
+    }
   }
 }

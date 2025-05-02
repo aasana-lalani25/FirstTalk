@@ -27,7 +27,7 @@ class HomePage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 20),
             child: Center(
               child: Text(
-                'Hi, $userName!',
+                'Hey, $userName!',
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
               ),
             ),

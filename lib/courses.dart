@@ -12,6 +12,7 @@ class CoursesPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.orangeAccent,
         title: Text('First Talk',
+            textAlign: TextAlign.center,
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
         actions: [
           IconButton(
@@ -23,8 +24,7 @@ class CoursesPage extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => ProfileDetailsPage()),
+                MaterialPageRoute(builder: (context) => ProfileDetailsPage()),
               );
             },
           )
@@ -48,8 +48,10 @@ class CoursesPage extends StatelessWidget {
               Text('Translate with FirstTalk',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
               SizedBox(height: 20),
-              _buildOption(Icons.document_scanner, 'Sign language translate', context),
-              _buildOption(Icons.video_library, 'Learning with videos', context),
+              _buildOption(
+                  Icons.document_scanner, 'Sign language translate', context),
+              _buildOption(
+                  Icons.video_library, 'Learning with videos', context),
               _buildOption(Icons.upload, 'Upload Media', context),
               _buildOption(Icons.search, 'Search In', context),
               SizedBox(height: 20),
@@ -67,7 +69,8 @@ class CoursesPage extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.orangeAccent,
           padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         ),
         onPressed: () {
           if (title == 'Sign language translate' && context != null) {
@@ -104,7 +107,11 @@ class CoursesPage extends StatelessWidget {
           children: [
             Icon(icon, size: 28, color: Colors.black),
             SizedBox(width: 16),
-            Text(title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black)),
+            Text(title,
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black)),
           ],
         ),
       ),
