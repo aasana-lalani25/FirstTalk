@@ -1,4 +1,4 @@
-import 'package:deaf_app/profile.dart';
+import 'package:first_talk/profile.dart';
 import 'package:flutter/material.dart';
 import 'search.dart';
 import 'learning_videos_page.dart';

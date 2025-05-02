@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'courses.dart';// Ensure CoursesPage is correctly imported
-import 'profile.dart';
+import 'package:first_talk/profile.dart';
 
 // Home page where user's name will be displayed
 class HomePage extends StatelessWidget {
@@ -40,7 +40,9 @@ class HomePage extends StatelessWidget {
                 // Navigate to the Profile Details page
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ProfileDetailsPage()), // Correct navigation here
+                  MaterialPageRoute(
+                    builder: (context) => ProfileDetailsPage(),
+                  ),
                 );
               },
               icon: Icon(Icons.person, color: Colors.black),
@@ -97,4 +99,3 @@ class HomePage extends StatelessWidget {
     );
   }
 }
-

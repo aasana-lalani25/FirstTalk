@@ -1,6 +1,8 @@
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'courses.dart';
 import 'home.dart';
+import 'package:http/http.dart' as http;
 
 void main() => runApp(MyApp());
 
@@ -89,54 +91,105 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
-//login page
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController _emailPhoneController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoginButtonEnabled = false;
   bool _isPasswordVisible = false;
-  String _emailPhoneErrorMessage = "";
+  String _emailErrorMessage = "";
 
   final RegExp emailRegExp = RegExp(
     r'^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com)$',
   );
 
-
-  final RegExp phoneRegExp = RegExp(r'^[0-9]{10}$'); // Exactly 10 digits
-
-  void _updateLoginButtonState() {
-    setState(() {
-      String input = _emailPhoneController.text;
-      bool isEmailValid = emailRegExp.hasMatch(input);
-      bool isPhoneValid = phoneRegExp.hasMatch(input);
-
-      if (input.isEmpty) {
-        _emailPhoneErrorMessage = "This field cannot be empty.";
-      } else if (!isEmailValid && !isPhoneValid) {
-        _emailPhoneErrorMessage =
-        "Enter a valid email (Gmail/Yahoo) or a 10-digit phone number.";
-      } else {
-        _emailPhoneErrorMessage = "";
-      }
-
-      _isLoginButtonEnabled =
-          (isEmailValid || isPhoneValid) && _passwordController.text.length >= 6;
-    });
-  }
-
   @override
   void initState() {
     super.initState();
-    _emailPhoneController.addListener(_updateLoginButtonState);
+    _emailController.addListener(_updateLoginButtonState);
     _passwordController.addListener(_updateLoginButtonState);
   }
 
   @override
   void dispose() {
-    _emailPhoneController.dispose();
+    _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
+
+  void _updateLoginButtonState() {
+    setState(() {
+      String email = _emailController.text.trim();
+      bool isEmailValid = emailRegExp.hasMatch(email);
+
+      if (email.isEmpty) {
+        _emailErrorMessage = "This field cannot be empty.";
+      } else if (!isEmailValid) {
+        _emailErrorMessage = "Enter a valid email (Gmail/Yahoo).";
+      } else {
+        _emailErrorMessage = "";
+      }
+
+      _isLoginButtonEnabled =
+          isEmailValid && _passwordController.text.length >= 6;
+    });
+  }
+
+  void _showAlert(BuildContext context, String title, String message) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: [
+          TextButton(
+              onPressed: () => Navigator.pop(context), child: Text("OK")),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _loginUser() async {
+    final uri = Uri.parse("http://192.168.1.70/backend/login_user.php");
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      _showAlert(context, "Error", "Please fill in all fields.");
+      return;
+    }
+
+    try {
+      var res = await http.post(uri, body: {
+        "email": email,
+        "password": password,
+      });
+
+      print("Login Response: ${res.body}");
+
+      if (res.statusCode == 200 && res.body.isNotEmpty) {
+        var response = jsonDecode(res.body);
+
+        if (response["success"] == true) {
+          String name = response["user"]["name"];
+          // Redirect to the HomePage after successful login
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomePage(userName: name), // Change CoursesPage to HomePage
+            ),
+          );
+        } else {
+          _showAlert(context, "Login Failed",
+              response["error"] ?? "Incorrect email or password.");
+        }
+      } else {
+        _showAlert(context, "Server Error", "Unexpected server response.");
+      }
+    } catch (e) {
+      _showAlert(context, "Error", "Network error: $e");
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -147,42 +200,31 @@ class _LoginPageState extends State<LoginPage> {
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Container(
-                    child: Image.asset("assets/first.jpg"),
-                    height: 75,
-                    width: 75,
-                  ),
-                  SizedBox(
-                    height: 0,
-                  ),
-                  Text(
-                    "FirstTalk",
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center,
-                  ),
+                  Image.asset("assets/first.jpg", height: 75, width: 75),
+                  SizedBox(height: 0),
+                  Text("FirstTalk",
+                      style:
+                      TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center),
                   SizedBox(height: 150),
-                  Text(
-                    "Login",
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center,
-                  ),
+                  Text("Login",
+                      style:
+                      TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center),
                   SizedBox(height: 30),
                   TextField(
-                    controller: _emailPhoneController,
+                    controller: _emailController,
                     decoration: InputDecoration(
-                      labelText: "Phone No/Email",
+                      labelText: "Email",
                       border: OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.circular(30), // Rounded corners
-                      ),
+                          borderRadius: BorderRadius.circular(30)),
                       fillColor: Colors.white,
                       filled: true,
-                      errorText: _emailPhoneErrorMessage.isEmpty
+                      errorText: _emailErrorMessage.isEmpty
                           ? null
-                          : _emailPhoneErrorMessage,
+                          : _emailErrorMessage,
                     ),
                     keyboardType: TextInputType.emailAddress,
                   ),
@@ -192,17 +234,13 @@ class _LoginPageState extends State<LoginPage> {
                     decoration: InputDecoration(
                       labelText: "Password",
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      // Rounded corners
+                          borderRadius: BorderRadius.circular(30)),
                       fillColor: Colors.white,
                       filled: true,
                       suffixIcon: IconButton(
-                        icon: Icon(
-                          _isPasswordVisible
-                              ? Icons.visibility
-                              : Icons.visibility_off,
-                        ),
+                        icon: Icon(_isPasswordVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off),
                         onPressed: () {
                           setState(() {
                             _isPasswordVisible = !_isPasswordVisible;
@@ -214,17 +252,15 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   SizedBox(height: 20),
                   ElevatedButton(
-                    onPressed: _isLoginButtonEnabled
-                        ? () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => HomePage(
-                              userName: '',
-                            )),
-                      );
-                    }
-                        : null,
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      backgroundColor:
+                      _isLoginButtonEnabled ? Colors.white : Colors.grey,
+                    ),
+                    onPressed: _isLoginButtonEnabled ? _loginUser : null,
                     child: Text("Login"),
                   ),
                   SizedBox(height: 10),
@@ -377,7 +413,7 @@ class RegistrationPage extends StatefulWidget {
 
 class _RegistrationPageState extends State<RegistrationPage> {
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController  _contactController  = TextEditingController();
+  final TextEditingController _contactController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _otpController = TextEditingController();
   bool _isRegisterButtonEnabled = false;
@@ -385,6 +421,68 @@ class _RegistrationPageState extends State<RegistrationPage> {
   String _contactErrorMessage = "";
   String _passwordErrorMessage = "";
   String _passwordInstructionMessage = "";
+
+  Future<void> insertrecord() async {
+    if (_nameController.text.isNotEmpty &&
+        _contactController.text.isNotEmpty &&
+        _passwordController.text.isNotEmpty) {
+      try {
+        String password = _passwordController.text.trim();
+
+        String uri = "http://192.168.1.70/backend/insert_record.php";
+        var res = await http.post(Uri.parse(uri), body: {
+          "name": _nameController.text.trim(),
+          "email": _contactController.text.trim(),
+          "password": password,
+        });
+
+        print("Response body: ${res.body}");
+
+        if (res.statusCode == 200 && res.body.isNotEmpty) {
+          var response = jsonDecode(res.body);
+
+          if (response["success"] == true || response["success"] == "true") {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Registration successful!")),
+            );
+          } else {
+            String error = response["error"] ?? "Unknown error";
+            if (error.contains("already a user")) {
+              showDialog(
+                context: context,
+                builder: (_) => AlertDialog(
+                  title: Text("User Exists"),
+                  content: Text("You are already a user, please login."),
+                  actions: [
+                    TextButton(
+                      child: Text("OK"),
+                      onPressed: () {
+                        Navigator.pop(context); // Close dialog
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => LoginPage()),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              );
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text("Error: $error")),
+              );
+            }
+          }
+        } else {
+          print("Server error: ${res.statusCode}");
+        }
+      } catch (e) {
+        print("Exception: $e");
+      }
+    } else {
+      print("Please fill all fields");
+    }
+  }
 
   final RegExp emailRegExp = RegExp(
     r'^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com)$',
@@ -394,7 +492,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
     r'^\d{10}$',
   );
 
-
   final RegExp passwordRegExp = RegExp(
     r'^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$',
   );
@@ -403,8 +500,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
     setState(() {
       bool isEmailValid = emailRegExp.hasMatch(_contactController.text);
       bool isPhoneValid = phoneRegExp.hasMatch(_contactController.text);
-      _contactErrorMessage =
-      (isEmailValid || isPhoneValid) ? "" : "Enter a valid Email or Phone Number.";
+      _contactErrorMessage = (isEmailValid || isPhoneValid)
+          ? ""
+          : "Enter a valid Email or Phone Number.";
 
       bool isPasswordValid = passwordRegExp.hasMatch(_passwordController.text);
       _passwordErrorMessage = isPasswordValid ? "" : "Follow instructions";
@@ -533,12 +631,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   ElevatedButton(
                     onPressed: _isRegisterButtonEnabled
                         ? () {
+                      insertrecord();
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => OtpVerificationPage(
-                              userContact: _otpController.text
-                          ),
+                              userContact: _otpController.text),
                         ),
                       );
                     }
