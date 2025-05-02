@@ -1,4 +1,4 @@
-import 'package:first_talk/profile.dart';
+import 'package:deaf_app/profile.dart';
 import 'package:flutter/material.dart';
 import 'search.dart';
 import 'learning_videos_page.dart';
@@ -30,29 +30,31 @@ class CoursesPage extends StatelessWidget {
           )
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Container(
-              height: 130,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/people_talking.jpg'),
-                  fit: BoxFit.cover,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              Container(
+                height: 130,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/people_talking.jpg'),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 130),
-            Text('Translate with FirstTalk',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-            SizedBox(height: 20),
-            _buildOption(Icons.document_scanner, 'Sign language translate', context),
-            _buildOption(Icons.video_library, 'Learning with videos', context),
-            _buildOption(Icons.upload, 'Upload Media', context),
-            _buildOption(Icons.search, 'Search In', context),
-            SizedBox(height: 20),
-          ],
+              SizedBox(height: 130),
+              Text('Translate with FirstTalk',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+              SizedBox(height: 20),
+              _buildOption(Icons.document_scanner, 'Sign language translate', context),
+              _buildOption(Icons.video_library, 'Learning with videos', context),
+              _buildOption(Icons.upload, 'Upload Media', context),
+              _buildOption(Icons.search, 'Search In', context),
+              SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
     );
